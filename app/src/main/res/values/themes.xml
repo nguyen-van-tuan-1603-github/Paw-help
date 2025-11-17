@@ -1,8 +1,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.PawHelp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <item name="colorPrimary">@color/button_primary</item>
+
+        <item name="colorPrimaryContainer">@color/button_end</item>
+
+        <item name="colorOnPrimary">@color/white</item>
+
+        <item name="colorSecondary">@color/button_start</item>
+
     </style>
 
     <style name="Theme.PawHelp" parent="Base.Theme.PawHelp" />
