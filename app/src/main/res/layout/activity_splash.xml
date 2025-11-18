@@ -8,63 +8,133 @@
     android:background="@drawable/background_welcome_gradient"
     tools:context=".SplashActivity">
 
+    <!-- Decorative paw prints in background -->
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_paw_logo"
+        android:alpha="0.15"
+        android:rotation="-15"
+        app:tint="#80CBC4"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="80dp" />
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_paw_logo"
+        android:alpha="0.1"
+        android:rotation="20"
+        app:tint="#80CBC4"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="48dp"
+        android:layout_marginTop="150dp" />
+
+    <ImageView
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:src="@drawable/ic_paw_logo"
+        android:alpha="0.12"
+        android:rotation="-25"
+        app:tint="#80CBC4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="60dp"
+        android:layout_marginBottom="200dp" />
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/ic_paw_logo"
+        android:alpha="0.1"
+        android:rotation="15"
+        app:tint="#80CBC4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="250dp" />
+
+    <!-- Main Logo Container -->
     <androidx.cardview.widget.CardView
         android:id="@+id/logo_container"
         android:layout_width="120dp"
         android:layout_height="120dp"
         app:cardCornerRadius="60dp"
-        app:cardElevation="8dp"
-        app:layout_constraintVertical_bias="0.4"
-        android:backgroundTint="#FFFFFF"
+        app:cardElevation="12dp"
+        app:layout_constraintVertical_bias="0.42"
+        app:cardBackgroundColor="#FFFFFF"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:id="@+id/imgLogo"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:layout_gravity="center"
             android:contentDescription="PawHelp Logo"
-            android:src="@drawable/ic_paw_logo_large" />
+            android:src="@drawable/ic_paw_logo"
+            app:tint="#4DB6AC" />
 
     </androidx.cardview.widget.CardView>
 
+    <!-- App Name -->
     <TextView
-        android:id="@+id/slogan_text"
+        android:id="@+id/tvAppName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:text="PawHelp"
-        android:textSize="32sp"
-        android:textColor="#009688"
+        android:textSize="28sp"
+        android:textColor="#FFFFFF"
         android:textStyle="bold"
+        android:letterSpacing="0.05"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/logo_container" />
 
+    <!-- Slogan -->
     <TextView
+        android:id="@+id/tvSlogan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cứu hộ động vật với tình yêu thương"
-        android:textColor="#009688"
-        android:textSize="16sp"
+        android:text="Yêu Thương Và Hành Động"
+        android:textColor="#FFFFFF"
+        android:alpha="0.85"
+        android:textSize="13sp"
+        android:layout_marginTop="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/slogan_text" /> <!-- Lỗi có thể nằm ở cú pháp đóng thẻ nếu không có thuộc tính khác -->
+        app:layout_constraintTop_toBottomOf="@id/tvAppName" />
 
+    <!-- Loading Indicator Dots -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
-        <!-- Đảm bảo các View này có kích thước hợp lệ, đã được sửa ở lần trước -->
-        <View android:layout_width="8dp" android:layout_height="8dp" android:background="@drawable/dot_active" android:layout_marginEnd="8dp"/>
-        <View android:layout_width="8dp" android:layout_height="8dp" android:background="@drawable/dot_inactive" android:layout_marginEnd="8dp"/>
-        <View android:layout_width="8dp" android:layout_height="8dp" android:background="@drawable/dot_inactive"/>
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/dot_active"
+            android:layout_marginEnd="8dp"/>
+        <View
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/dot_inactive"
+            android:layout_marginEnd="8dp"/>
+        <View
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/dot_inactive"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
