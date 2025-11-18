@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_marginBottom="16dp">
+
+    <!-- Logo PawHelp -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:cardCornerRadius="40dp"
+        app:cardElevation="4dp"
+        android:backgroundTint="#FFFFFF"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="8dp">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_paw_logo_large"
+            android:contentDescription="PawHelp Logo" />
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PawHelp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_primary" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cứu hộ động vật với tình yêu thương"
+        android:textSize="14sp"
+        android:textColor="@color/text_secondary"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Nút chuyển đổi (Đăng nhập / Đăng ký) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_marginTop="8dp">
+
+        <!-- Tab ĐĂNG NHẬP (Active State) -->
+        <Button
+            android:id="@+id/tab_login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Đăng nhập"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/tab_active_background"
+            android:layout_marginEnd="4dp" />
+
+        <!-- Tab ĐĂNG KÝ (Inactive State) -->
+        <Button
+            android:id="@+id/tab_register"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Đăng ký"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/tab_inactive_background"
+            android:layout_marginStart="4dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
