@@ -9,23 +9,17 @@
     android:background="@drawable/background_welcome_gradient"
     tools:context=".WelcomeActivity">
 
-    <androidx.cardview.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="24dp"
-        app:cardCornerRadius="25dp"
-        app:cardElevation="10dp"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="24dp"
-            android:gravity="center_horizontal">
 
             <ImageView
                 android:layout_width="100dp"
@@ -64,29 +58,26 @@
             <Button
                 android:id="@+id/btnLogin"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/button_height_medium"
                 android:text="Đăng nhập"
                 android:textColor="#FFFFFF"
                 android:backgroundTint="@color/button_primary"
                 android:drawableStart="@drawable/ic_login_arrow"
-                android:paddingVertical="12dp"
-                app:cornerRadius="25dp"
-                android:layout_marginBottom="16dp" />
+                app:cornerRadius="@dimen/radius_medium"
+                android:layout_marginBottom="@dimen/spacing_m" />
 
             <Button
-                android:id="@+id/btnRegister"
+                android:id="@+id/btnGetStarted"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_height="@dimen/button_height_medium"
+                android:layout_marginBottom="@dimen/spacing_m"
                 android:backgroundTint="#FFFFFF"
                 android:drawableStart="@drawable/ic_register_person"
                 android:elevation="0dp"
                 android:outlineProvider="none"
-                android:paddingVertical="12dp"
                 android:text="Đăng ký tài khoản"
                 android:textColor="@color/button_primary"
-                app:cornerRadius="25dp" />
+                app:cornerRadius="@dimen/radius_medium" />
 
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

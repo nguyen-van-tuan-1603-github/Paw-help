@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_welcome_gradient"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:background="@android:color/transparent">
+
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/muiten"
+                android:padding="8dp"
+                android:layout_centerVertical="true"
+                android:contentDescription="Back button" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trang DangBai User"
+                android:textSize="18sp"
+                android:textColor="@color/text_secondary"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
+
+        <!-- Content Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Header Section -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:background="#FFB4C8">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/muiten"
+                            android:rotation="180"
+                            android:padding="8dp"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Bài tin cứu hộ"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginStart="8dp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Đăng tin cứu hộ thú cưng"
+                        android:textColor="@color/white_opacity"
+                        android:textSize="12sp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginStart="48dp" />
+                </LinearLayout>
+
+                <!-- Form Section -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:background="#E0F7FA">
+
+                    <!-- Upload Image Section -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="24dp"
+                        android:background="@android:color/white">
+
+                        <ImageView
+                            android:id="@+id/btnUploadImage"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:src="@drawable/ic_paw_logo"
+                            app:tint="#B2EBF2"
+                            android:padding="16dp" />
+
+                        <ImageView
+                            android:id="@+id/imgPreview"
+                            android:layout_width="200dp"
+                            android:layout_height="200dp"
+                            android:scaleType="centerCrop"
+                            android:visibility="gone"
+                            android:layout_marginTop="8dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tải ảnh lên"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="#00ACC1"
+                            android:layout_marginTop="12dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Nhấn để chọn ảnh"
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary"
+                            android:layout_marginTop="4dp" />
+                    </LinearLayout>
+
+                    <!-- Input Fields Section -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="MÔ TẢ TÌNH TRẠNG"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#00ACC1"
+                        android:background="@android:color/white"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="6dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Title Input -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tiêu đề"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_primary"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp" />
+
+                    <EditText
+                        android:id="@+id/edtTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Mô tả chi tiết tình trạng của động vật (bị thương, hành vi, số lượng...)"
+                        android:background="@drawable/input_field_background"
+                        android:padding="14dp"
+                        android:textSize="14sp"
+                        android:textColorHint="@color/text_secondary"
+                        android:layout_marginBottom="16dp"
+                        android:minLines="1"
+                        android:maxLines="3" />
+
+                    <!-- Location Input -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Địa điểm"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_primary"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp" />
+
+                    <EditText
+                        android:id="@+id/edtLocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Mô tả càng chi tiết càng tốt để tìm được sự cứu hộ hiệu quả"
+                        android:background="@drawable/input_field_background"
+                        android:padding="14dp"
+                        android:textSize="14sp"
+                        android:textColorHint="@color/text_secondary"
+                        android:layout_marginBottom="16dp"
+                        android:minLines="2"
+                        android:maxLines="4"
+                        android:gravity="top" />
+
+                    <!-- Description Input -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ghi chú"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_primary"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp" />
+
+                    <EditText
+                        android:id="@+id/edtDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nhập địa chỉ cụ thể (tên đường, đường, ghi điểm nổi bật)"
+                        android:background="@drawable/input_field_background"
+                        android:padding="14dp"
+                        android:textSize="14sp"
+                        android:textColorHint="@color/text_secondary"
+                        android:layout_marginBottom="24dp"
+                        android:minLines="3"
+                        android:maxLines="6"
+                        android:gravity="top" />
+
+                    <!-- Submit Button -->
+                    <Button
+                        android:id="@+id/btnSubmitPost"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/button_height_large"
+                        android:text="Đăng bài cứu hộ"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/button_gradient_background"
+                        android:layout_marginTop="@dimen/spacing_s" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Bottom Spacing -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="24dp" />
+    </LinearLayout>
+</ScrollView>

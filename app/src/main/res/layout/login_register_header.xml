@@ -42,38 +42,5 @@
         android:textColor="@color/text_secondary"
         android:layout_marginBottom="8dp" />
 
-    <!-- Nút chuyển đổi (Đăng nhập / Đăng ký) -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="2"
-        android:layout_marginTop="8dp">
-
-        <!-- Tab ĐĂNG NHẬP (Active State) -->
-        <Button
-            android:id="@+id/tab_login"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Đăng nhập"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/tab_active_background"
-            android:layout_marginEnd="4dp" />
-
-        <!-- Tab ĐĂNG KÝ (Inactive State) -->
-        <Button
-            android:id="@+id/tab_register"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Đăng ký"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/tab_inactive_background"
-            android:layout_marginStart="4dp" />
-
-    </LinearLayout>
 
 </LinearLayout>

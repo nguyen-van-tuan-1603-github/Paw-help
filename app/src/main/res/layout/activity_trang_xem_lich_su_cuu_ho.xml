@@ -31,7 +31,7 @@
                 android:gravity="center_vertical">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cardBackIcon"
+                    android:id="@+id/btnBack"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     app:cardCornerRadius="20dp"
@@ -42,8 +42,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:padding="8dp"
-                        android:src="@drawable/ic_launcher_background"
-                        app:srcCompat="@drawable/muiten" />
+                        android:src="@drawable/muiten"
+                        android:contentDescription="Back button" />
                 </androidx.cardview.widget.CardView>
 
                 <LinearLayout
@@ -125,99 +125,30 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardHistoryItem"
+        <!-- RecyclerView for History List -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewHistory"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:cardCornerRadius="24dp"
-            app:cardBackgroundColor="#FFFFFF"
-            app:cardElevation="0dp"
+            android:nestedScrollingEnabled="false"
             app:layout_constraintTop_toBottomOf="@id/cardTotalRescued"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp">
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardPetImage"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="0dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" >
-
-                    <ImageView
-                        android:id="@+id/ivPetImage"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/ic_launcher_background"
-                        app:srcCompat="@drawable/meo" />
-
-                </androidx.cardview.widget.CardView>
-
-                <TextView
-                    android:id="@+id/tvRescueDescription"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Một chú mèo bị kẹt trên cây cao khoảng 5m, đã hơn 2"
-                    android:layout_marginStart="16dp"
-                    android:textColor="@android:color/black"
-                    app:layout_constraintStart_toEndOf="@id/cardPetImage"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/ivCheckmark"/>
-
-                <ImageView
-                    android:id="@+id/ivCheckmark"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_launcher_background"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:srcCompat="@android:drawable/checkbox_on_background" />
-
-                <TextView
-                    android:id="@+id/tvLocation"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Công viên Tao Đàn, Quận"
-
-                    android:drawablePadding="8dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintStart_toEndOf="@id/cardPetImage"
-                    app:layout_constraintTop_toBottomOf="@id/tvRescueDescription"
-                    app:layout_constraintEnd_toEndOf="parent"/>
-
-                <TextView
-                    android:id="@+id/tvDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="13 thg 11, 2025"
-
-                    android:drawablePadding="8dp"
-                    app:layout_constraintStart_toStartOf="@+id/tvLocation"
-                    app:layout_constraintTop_toBottomOf="@+id/tvLocation" />
-
-                <TextView
-                    android:id="@+id/tvRescueTeam"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Đội cứu hộ A"
-
-                    android:drawablePadding="8dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/tvDate"
-                    app:layout_constraintBottom_toBottomOf="@+id/tvDate"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.cardview.widget.CardView>
+        <!-- Empty State Message -->
+        <TextView
+            android:id="@+id/tvEmptyHistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chưa có lịch sử cứu hộ nào"
+            android:textSize="16sp"
+            android:textColor="@color/text_secondary"
+            android:visibility="gone"
+            android:layout_marginTop="32dp"
+            app:layout_constraintTop_toBottomOf="@id/cardTotalRescued"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

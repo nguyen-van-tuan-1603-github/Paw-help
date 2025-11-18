@@ -12,4 +12,10 @@
     </style>
 
     <style name="Theme.PawHelp" parent="Base.Theme.PawHelp" />
+
+    <!-- Theme for Splash Screen -->
+    <style name="Theme.PawHelp.NoActionBar" parent="Theme.PawHelp">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
 </resources>
