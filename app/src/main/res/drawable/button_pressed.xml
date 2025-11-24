@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Reduced shadow when pressed -->
+    <item android:top="2dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="28dp" />
+            <solid android:color="#20000000" />
+        </shape>
+    </item>
+    
+    <!-- Button gradient slightly darker -->
+    <item android:bottom="2dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#00ACC1"
+                android:centerColor="#00897B"
+                android:endColor="#00695C"
+                android:angle="45"
+                android:type="linear" />
+            <corners android:radius="28dp" />
+        </shape>
+    </item>
+</layer-list>
