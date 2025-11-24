@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Shadow layer -->
+    <item android:top="2dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="12dp" />
+            <solid android:color="#20000000" />
+        </shape>
+    </item>
+    
+    <!-- Main input field with focused state -->
+    <item android:bottom="2dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="12dp" />
+            <solid android:color="#FFFFFF" />
+            <stroke android:width="2dp" android:color="#00ACC1" />
+        </shape>
+    </item>
+</layer-list>
