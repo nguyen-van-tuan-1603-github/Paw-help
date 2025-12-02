@@ -24,6 +24,7 @@ public class TrangCuuHoActivity extends AppCompatActivity {
     private ImageView btnBack;
     private Button btnCallEmergency, btnGetLocation, btnReportIncident;
     private TextView tvEmergencyInfo, tvLocationInfo;
+    private androidx.cardview.widget.CardView cardLocationInfo;
 
     private FusedLocationProviderClient fusedLocationClient;
     private Location currentLocation;
@@ -42,12 +43,12 @@ public class TrangCuuHoActivity extends AppCompatActivity {
 
     private void initViews() {
         btnBack = findViewById(R.id.btnBack);
-        // TODO: Add these views to layout
-        // btnCallEmergency = findViewById(R.id.btnCallEmergency);
-        // btnGetLocation = findViewById(R.id.btnGetLocation);
-        // btnReportIncident = findViewById(R.id.btnReportIncident);
-        // tvEmergencyInfo = findViewById(R.id.tvEmergencyInfo);
-        // tvLocationInfo = findViewById(R.id.tvLocationInfo);
+        btnCallEmergency = findViewById(R.id.btnCallEmergency);
+        btnGetLocation = findViewById(R.id.btnGetLocation);
+        btnReportIncident = findViewById(R.id.btnReportIncident);
+        tvEmergencyInfo = findViewById(R.id.tvEmergencyInfo);
+        tvLocationInfo = findViewById(R.id.tvLocationInfo);
+        cardLocationInfo = findViewById(R.id.cardLocationInfo);
     }
 
     private void setupListeners() {
@@ -55,15 +56,20 @@ public class TrangCuuHoActivity extends AppCompatActivity {
             btnBack.setOnClickListener(v -> finish());
         }
 
-        // TODO: Add button listeners when views are added to layout
-        /*
-        btnCallEmergency.setOnClickListener(v -> callEmergencyNumber());
-        btnGetLocation.setOnClickListener(v -> getCurrentLocation());
-        btnReportIncident.setOnClickListener(v -> {
-            Intent intent = new Intent(TrangCuuHoActivity.this, TrangDangBaiActivity.class);
-            startActivity(intent);
-        });
-        */
+        if (btnCallEmergency != null) {
+            btnCallEmergency.setOnClickListener(v -> callEmergencyNumber());
+        }
+
+        if (btnGetLocation != null) {
+            btnGetLocation.setOnClickListener(v -> getCurrentLocation());
+        }
+
+        if (btnReportIncident != null) {
+            btnReportIncident.setOnClickListener(v -> {
+                Intent intent = new Intent(TrangCuuHoActivity.this, TrangDangBaiActivity.class);
+                startActivity(intent);
+            });
+        }
     }
 
     private void checkLocationPermission() {
@@ -88,7 +94,7 @@ public class TrangCuuHoActivity extends AppCompatActivity {
             .addOnSuccessListener(this, location -> {
                 if (location != null) {
                     currentLocation = location;
-                    // updateLocationInfo(location); // TODO: Uncomment when tvLocationInfo is added
+                    updateLocationInfo(location);
                     Toast.makeText(this, "Đã lấy vị trí thành công", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "Không thể lấy vị trí hiện tại",
@@ -102,13 +108,12 @@ public class TrangCuuHoActivity extends AppCompatActivity {
     }
 
     private void updateLocationInfo(Location location) {
-        // TODO: Add tvLocationInfo to layout first
-        /*
-        String locationText = "Vị trí hiện tại:\n" +
-            "Vĩ độ: " + location.getLatitude() + "\n" +
-            "Kinh độ: " + location.getLongitude();
-        tvLocationInfo.setText(locationText);
-        */
+        if (tvLocationInfo != null && cardLocationInfo != null) {
+            String locationText = "Vĩ độ: " + String.format("%.6f", location.getLatitude()) + 
+                "\nKinh độ: " + String.format("%.6f", location.getLongitude());
+            tvLocationInfo.setText(locationText);
+            cardLocationInfo.setVisibility(android.view.View.VISIBLE);
+        }
     }
 
     private void callEmergencyNumber() {

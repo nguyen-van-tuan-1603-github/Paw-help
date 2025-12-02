@@ -4,9 +4,7 @@ plugins {
 
 android {
     namespace = "com.example.paw_help"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.paw_help"
@@ -43,6 +41,12 @@ dependencies {
 
     // Google Play Services for Location
     implementation("com.google.android.gms:play-services-location:21.0.1")
+    
+    // CoordinatorLayout for better scrolling behavior
+    implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
+    
+    // ViewPager2 for better UI
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
