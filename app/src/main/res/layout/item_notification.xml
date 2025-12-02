@@ -43,7 +43,7 @@
                 android:id="@+id/tvNotificationTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mèo tố tình trạng"
+                android:text="Mèo cần cứu hộ"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary" />

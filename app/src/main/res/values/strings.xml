@@ -1,3 +1,117 @@
 <resources>
+    <!-- App Name -->
     <string name="app_name">PawHelp</string>
+    <string name="app_slogan">Yêu Thương Và Hành Động</string>
+    <string name="app_tagline">Cứu hộ động vật với tình yêu thương</string>
+    
+    <!-- Welcome Screen -->
+    <string name="welcome_message">Cùng nhau giúp đỡ những động vật\nđang cần cứu hộ tại Đà Nẵng 🐾</string>
+    <string name="btn_login">Đăng nhập</string>
+    <string name="btn_register">Đăng ký tài khoản</string>
+    <string name="btn_get_started">Bắt đầu</string>
+    
+    <!-- Auth Screens -->
+    <string name="email_label">Email</string>
+    <string name="password_label">Mật khẩu</string>
+    <string name="confirm_password_label">Nhập lại mật khẩu</string>
+    <string name="full_name_label">Họ và tên</string>
+    <string name="phone_label">Số điện thoại</string>
+    <string name="forgot_password">Quên mật khẩu?</string>
+    <string name="no_account">Chưa có tài khoản?</string>
+    <string name="have_account">Đã có tài khoản?</string>
+    <string name="agree_terms">Tôi đồng ý với điều khoản sử dụng</string>
+    
+    <!-- Hints -->
+    <string name="hint_email">example@email.com</string>
+    <string name="hint_password">********</string>
+    <string name="hint_fullname">Nhập họ tên của bạn</string>
+    <string name="hint_phone">Nhập số điện thoại</string>
+    <string name="hint_location">Nhập địa chỉ cụ thể</string>
+    <string name="hint_description">Mô tả tình trạng động vật</string>
+    
+    <!-- Main Screen -->
+    <string name="main_title">PawHelp</string>
+    <string name="main_subtitle">Trang chủ cứu hộ</string>
+    <string name="sos_label">SOS</string>
+    <string name="need_rescue">Cần cứu</string>
+    <string name="rescued">Đã cứu</string>
+    <string name="total">Tổng số</string>
+    <string name="about_us">Về chúng tôi</string>
+    <string name="team">Đội ngũ</string>
+    <string name="recent_rescue_posts">Tin cứu hộ gần đây</string>
+    
+    <!-- Post Detail -->
+    <string name="post_detail_title">Chi tiết tin đăng</string>
+    <string name="location_label">Địa điểm</string>
+    <string name="call_button">Gọi điện</string>
+    <string name="report_button">Báo cáo</string>
+    <string name="help_rescue">Tôi muốn giúp cứu hộ</string>
+    <string name="status_waiting">Chờ cứu</string>
+    <string name="status_processing">Đang xử lý</string>
+    <string name="status_rescued">Đã cứu</string>
+    <string name="view_details">Chi tiết</string>
+    
+    <!-- Create Post -->
+    <string name="create_post_title">Bài tin cứu hộ</string>
+    <string name="create_post_subtitle">Đăng tin cứu hộ thú cưng</string>
+    <string name="upload_image">Tải ảnh lên</string>
+    <string name="click_to_select">Nhấn để chọn ảnh</string>
+    <string name="description_section">MÔ TẢ TÌNH TRẠNG</string>
+    <string name="title_label">Tiêu đề</string>
+    <string name="note_label">Ghi chú</string>
+    <string name="submit_post">Đăng bài cứu hộ</string>
+    
+    <!-- User Profile -->
+    <string name="profile_title">Thông tin tài khoản</string>
+    <string name="account_label">Tài khoản</string>
+    <string name="edit_profile">Chỉnh sửa thông tin</string>
+    <string name="logout">Đăng xuất</string>
+    <string name="user_label">Người dùng</string>
+    <string name="not_updated">Chưa cập nhật</string>
+    <string name="profile_footer">Chúc bạn có trải nghiệm cứu hộ tuyệt vời 🐾</string>
+    
+    <!-- Notifications -->
+    <string name="notifications_title">Thông báo</string>
+    <string name="mark_all_read">Đánh dấu</string>
+    <string name="no_notifications">Chưa có thông báo nào</string>
+    <string name="mark_read_confirm">Bạn có chắc muốn đánh dấu tất cả thông báo là đã đọc không?</string>
+    <string name="confirm">Xác nhận</string>
+    <string name="cancel">Hủy</string>
+    
+    <!-- About Us -->
+    <string name="about_section">VỀ CHÚNG TÔI</string>
+    <string name="mission_title">Sứ mệnh của chúng tôi</string>
+    <string name="mission_description">Hội Cứu Trợ Động Vật Đà Nẵng được thành lập từ tháng 01/2013, với sứ mệnh bảo vệ và cải thiện cuộc sống của các động vật bị bỏ rơi, lạc dạng và gặp nạn.</string>
+    <string name="achievements_section">THÀNH TÍCH</string>
+    <string name="contact_section">LIÊN HỆ</string>
+    <string name="follow_facebook">Theo dõi trên Facebook</string>
+    <string name="visit_website">Truy cập Website</string>
+    <string name="send_email">Gửi Email cho chúng tôi</string>
+    <string name="view_team">Xem đội ngũ</string>
+    <string name="donate">Ủng hộ</string>
+    <string name="since_2013">Từ 2013</string>
+    
+    <!-- Team -->
+    <string name="team_title">Đội ngũ của chúng tôi</string>
+    <string name="team_subtitle">Những người đồng hành cùng bạn</string>
+    <string name="team_section">ĐỘI NGŨ CỦA CHÚNG TÔI</string>
+    <string name="email_action">Email</string>
+    <string name="call_action">Gọi</string>
+    
+    <!-- Forgot Password -->
+    <string name="forgot_password_title">Quên mật khẩu?</string>
+    <string name="forgot_password_subtitle">Nhập email của bạn để nhận link đặt lại mật khẩu</string>
+    <string name="send_reset_link">Gửi link đặt lại</string>
+    <string name="reset_info">Bạn sẽ nhận được email chứa hướng dẫn đặt lại mật khẩu trong vài phút</string>
+    <string name="remember_password">Nhớ mật khẩu?</string>
+    
+    <!-- Common -->
+    <string name="back">Quay lại</string>
+    <string name="share">Chia sẻ</string>
+    <string name="loading">Đang tải…</string>
+    <string name="error">Có lỗi xảy ra</string>
+    <string name="success">Thành công</string>
+    <string name="time_hours_ago">%d giờ trước</string>
+    <string name="time_minutes_ago">%d phút trước</string>
+    <string name="time_days_ago">%d ngày trước</string>
 </resources>

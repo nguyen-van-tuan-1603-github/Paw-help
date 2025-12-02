@@ -31,18 +31,23 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PawHelp"
-                android:textSize="28sp"
-                android:textColor="@color/text_primary"
+                android:text="@string/app_name"
+                android:textSize="32sp"
+                android:textColor="#FFFFFF"
                 android:textStyle="bold"
+                android:shadowColor="#40000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="4"
                 android:layout_marginTop="8dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cùng nhau giúp đỡ những động vật\nđang cần cứu hộ tại Đà Nẵng 🐾"
+                android:text="@string/welcome_message"
                 android:gravity="center"
-                android:textColor="@color/text_secondary"
+                android:textColor="#E0FFFFFF"
+                android:textSize="15sp"
                 android:layout_marginTop="8dp" />
 
             <ImageView
@@ -58,25 +63,31 @@
             <Button
                 android:id="@+id/btnLogin"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/button_height_medium"
-                android:text="Đăng nhập"
+                android:layout_height="@dimen/button_height_large"
+                android:text="@string/btn_login"
                 android:textColor="#FFFFFF"
-                android:backgroundTint="@color/button_primary"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:background="@drawable/button_gradient_background"
                 android:drawableStart="@drawable/ic_login_arrow"
+                android:drawablePadding="8dp"
                 app:cornerRadius="@dimen/radius_medium"
+                android:elevation="8dp"
                 android:layout_marginBottom="@dimen/spacing_m" />
 
             <Button
                 android:id="@+id/btnGetStarted"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/button_height_medium"
+                android:layout_height="@dimen/button_height_large"
                 android:layout_marginBottom="@dimen/spacing_m"
                 android:backgroundTint="#FFFFFF"
                 android:drawableStart="@drawable/ic_register_person"
-                android:elevation="0dp"
-                android:outlineProvider="none"
-                android:text="Đăng ký tài khoản"
+                android:drawablePadding="8dp"
+                android:elevation="4dp"
+                android:text="@string/btn_register"
+                android:textSize="16sp"
                 android:textColor="@color/button_primary"
+                android:textStyle="bold"
                 app:cornerRadius="@dimen/radius_medium" />
 
     </LinearLayout>

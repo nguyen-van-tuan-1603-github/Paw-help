@@ -57,7 +57,7 @@ public class PostDetailActivity extends AppCompatActivity {
         // Set default values if null
         if (postTitle == null) postTitle = "Phát hiện động vật cần cứu hộ";
         if (postLocation == null) postLocation = "Đà Nẵng";
-        if (postStatus == null) postStatus = "Mới tố tình trạng";
+        if (postStatus == null) postStatus = "Mới cần cứu hộ";
         if (contactPhone == null) contactPhone = "0123456789";
 
         // Display data

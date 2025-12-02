@@ -27,46 +27,58 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="24dp"
-                android:text="Đăng nhập"
-                android:textSize="24sp"
+                android:text="@string/btn_login"
+                android:textSize="28sp"
                 android:textStyle="bold"
-                android:textColor="@color/text_primary" />
+                android:textColor="#FFFFFF"
+                android:shadowColor="#40000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="3" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Email"
-                android:textColor="@color/text_secondary" />
+                android:text="@string/email_label"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/edtEmail"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/input_field_background"
                 android:drawableStart="@drawable/ic_email"
-                android:drawablePadding="10dp"
-                android:hint="example@email.com"
+                android:drawablePadding="12dp"
+                android:hint="@string/hint_email"
                 android:inputType="textEmailAddress"
-                android:padding="12dp" />
+                android:paddingHorizontal="16dp"
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mật khẩu"
-                android:textColor="@color/text_secondary" />
+                android:text="@string/password_label"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/edtPassword"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="12dp"
                 android:background="@drawable/input_field_background"
                 android:drawableStart="@drawable/ic_lock"
-                android:drawablePadding="10dp"
-                android:hint="********"
+                android:drawablePadding="12dp"
+                android:hint="@string/hint_password"
                 android:inputType="textPassword"
-                android:padding="12dp" />
+                android:paddingHorizontal="16dp"
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/tvForgotPassword"
@@ -74,18 +86,22 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginBottom="24dp"
-                android:padding="4dp"
-                android:text="Quên mật khẩu?"
-                android:textColor="@color/text_link" />
+                android:padding="8dp"
+                android:text="@string/forgot_password"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="14sp" />
 
             <Button
                 android:id="@+id/btnLogin"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/button_height_medium"
+                android:layout_height="@dimen/button_height_large"
                 android:background="@drawable/button_gradient_background"
-                android:text="Đăng nhập"
+                android:text="@string/btn_login"
                 android:textColor="#FFFFFF"
+                android:textSize="16sp"
                 android:textStyle="bold"
+                android:elevation="8dp"
                 app:cornerRadius="@dimen/radius_medium" />
 
             <LinearLayout
@@ -98,17 +114,19 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Chưa có tài khoản? "
-                    android:textColor="@color/text_secondary" />
+                    android:text="@string/no_account"
+                    android:textColor="#E0FFFFFF"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/tvRegister"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="4dp"
-                    android:text="Đăng ký"
-                    android:textColor="@color/text_link"
-                    android:textStyle="bold" />
+                    android:text="@string/btn_register"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    android:textSize="14sp" />
             </LinearLayout>
 
     </LinearLayout>

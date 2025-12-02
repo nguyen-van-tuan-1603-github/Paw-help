@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:background="@android:color/transparent">
+            android:background="#4DB6AC">
 
             <ImageView
                 android:id="@+id/btnBack"
@@ -25,14 +25,16 @@
                 android:src="@drawable/muiten"
                 android:padding="8dp"
                 android:layout_centerVertical="true"
+                app:tint="@color/white"
                 android:contentDescription="Back button" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Trang DangBai User"
+                android:text="Đăng tin cứu hộ"
                 android:textSize="18sp"
-                android:textColor="@color/text_secondary"
+                android:textColor="@color/white"
+                android:textStyle="bold"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true" />
         </RelativeLayout>
