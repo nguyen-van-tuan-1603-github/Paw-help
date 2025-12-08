@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông báo - PawHelp Admin</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="admin-panel">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-paw"></i>
+            <h2>PawHelp</h2>
+            <button class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="posts.html" class="nav-item">
+                <i class="fas fa-newspaper"></i>
+                <span>Bài đăng cứu hộ</span>
+            </a>
+            <a href="users.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Người dùng</span>
+            </a>
+            <a href="notifications.html" class="nav-item active">
+                <i class="fas fa-bell"></i>
+                <span>Thông báo</span>
+            </a>
+            <a href="team.html" class="nav-item">
+                <i class="fas fa-user-tie"></i>
+                <span>Đội ngũ</span>
+            </a>
+            <a href="#" class="nav-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng xuất</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="content-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Quản lý thông báo</h1>
+            </div>
+        </header>
+
+        <div class="content-body">
+            <!-- Actions -->
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <button class="btn btn-success" onclick="markAllRead()">
+                        <i class="fas fa-check-double"></i> Đánh dấu tất cả đã đọc
+                    </button>
+                </div>
+                <div class="filter-group">
+                    <button class="btn btn-primary" onclick="loadNotifications()">
+                        <i class="fas fa-sync-alt"></i> Làm mới
+                    </button>
+                </div>
+            </div>
+
+            <!-- Notifications List -->
+            <div class="table-card">
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th width="60">ID</th>
+                                <th width="80">Loại</th>
+                                <th>Tiêu đề</th>
+                                <th>Nội dung</th>
+                                <th width="120">Trạng thái</th>
+                                <th width="180">Thời gian</th>
+                                <th width="100">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="notificationsTable">
+                            <tr>
+                                <td colspan="7" class="text-center">
+                                    <i class="fas fa-spinner fa-spin"></i> Đang tải...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        // Load notifications
+        async function loadNotifications() {
+            const tableBody = document.getElementById('notificationsTable');
+            tableBody.innerHTML = '<tr><td colspan="7" class="text-center"><i class="fas fa-spinner fa-spin"></i> Đang tải...</td></tr>';
+            
+            try {
+                const response = await apiGet(`${API_ENDPOINTS.NOTIFICATIONS}?limit=50`);
+                
+                if (response.success && response.data.items.length > 0) {
+                    tableBody.innerHTML = response.data.items.map(notif => `
+                        <tr style="${!notif.isRead ? 'background: #F0F8FF;' : ''}">
+                            <td>${notif.notificationId}</td>
+                            <td>
+                                <i class="fas fa-${getTypeIcon(notif.type)}" style="color: ${getTypeColor(notif.type)}; font-size: 18px;" title="${notif.type}"></i>
+                            </td>
+                            <td><strong>${notif.title}</strong></td>
+                            <td>${notif.message}</td>
+                            <td>
+                                ${notif.isRead ? 
+                                    '<span class="badge badge-closed">Đã đọc</span>' : 
+                                    '<span class="badge badge-pending">Chưa đọc</span>'
+                                }
+                            </td>
+                            <td>${timeAgo(notif.createdAt)}</td>
+                            <td>
+                                ${!notif.isRead ? `
+                                    <button class="btn btn-sm btn-success" onclick="markAsRead(${notif.notificationId})" title="Đánh dấu đã đọc">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                ` : '-'}
+                            </td>
+                        </tr>
+                    `).join('');
+                } else {
+                    tableBody.innerHTML = '<tr><td colspan="7" class="text-center">Chưa có thông báo nào</td></tr>';
+                }
+            } catch (error) {
+                console.error('Error loading notifications:', error);
+                tableBody.innerHTML = '<tr><td colspan="7" class="text-center" style="color: #F44336;">Lỗi khi tải thông báo</td></tr>';
+            }
+        }
+
+        // Mark notification as read
+        async function markAsRead(notificationId) {
+            try {
+                const response = await apiPatch(API_ENDPOINTS.NOTIFICATION_READ(notificationId));
+                
+                if (response.success) {
+                    showToast('Đánh dấu đã đọc thành công');
+                    loadNotifications();
+                }
+            } catch (error) {
+                console.error('Error marking as read:', error);
+                showToast('Lỗi khi đánh dấu đã đọc', 'error');
+            }
+        }
+
+        // Mark all as read
+        async function markAllRead() {
+            try {
+                const response = await apiPatch(API_ENDPOINTS.NOTIFICATIONS_READ_ALL);
+                
+                if (response.success) {
+                    showToast('Đánh dấu tất cả đã đọc thành công');
+                    loadNotifications();
+                }
+            } catch (error) {
+                console.error('Error marking all as read:', error);
+                showToast('Lỗi khi đánh dấu tất cả', 'error');
+            }
+        }
+
+        // Get notification type icon
+        function getTypeIcon(type) {
+            switch(type) {
+                case 'success': return 'check-circle';
+                case 'warning': return 'exclamation-triangle';
+                case 'danger': return 'times-circle';
+                default: return 'info-circle';
+            }
+        }
+
+        // Get notification type color
+        function getTypeColor(type) {
+            switch(type) {
+                case 'success': return '#4CAF50';
+                case 'warning': return '#FF9800';
+                case 'danger': return '#F44336';
+                default: return '#2196F3';
+            }
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            loadNotifications();
+        });
+    </script>
+</body>
+</html>
+

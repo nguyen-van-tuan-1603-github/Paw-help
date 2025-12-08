@@ -8,3 +8,31 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Loại bỏ tất cả file Markdown
+*.md
+*.MD
+
+# Backend - File cấu hình nhạy cảm
+backend/.env
+backend/config/database.js
+backend/config/database-sqlserver.js
+backend/config/jwt.js
+backend/node_modules/
+backend/package-lock.json
+
+# Gradle wrapper và build files
+gradle.properties
+gradlew
+gradlew.bat
+build.gradle.kts
+settings.gradle.kts
+app/build.gradle.kts
+
+# Uploads và database
+backend/uploads/
+backend/database/
+
+# Build outputs
+app/build/
+build/

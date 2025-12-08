@@ -28,21 +28,27 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="24dp"
                 android:text="@string/btn_login"
-                android:textSize="28sp"
+                android:textSize="32sp"
                 android:textStyle="bold"
                 android:textColor="#FFFFFF"
-                android:shadowColor="#40000000"
-                android:shadowDx="2"
-                android:shadowDy="2"
-                android:shadowRadius="3" />
+                android:shadowColor="#80000000"
+                android:shadowDx="3"
+                android:shadowDy="3"
+                android:shadowRadius="6"
+                android:letterSpacing="0.05" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/email_label"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/text_label_light"
                 android:textStyle="bold"
-                android:textSize="14sp" />
+                android:textSize="16sp"
+                android:shadowColor="#CC000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="4"
+                android:letterSpacing="0.02" />
 
             <EditText
                 android:id="@+id/edtEmail"
@@ -62,9 +68,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/password_label"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/text_label_light"
                 android:textStyle="bold"
-                android:textSize="14sp" />
+                android:textSize="16sp"
+                android:shadowColor="#CC000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="4"
+                android:letterSpacing="0.02" />
 
             <EditText
                 android:id="@+id/edtPassword"
@@ -88,9 +99,13 @@
                 android:layout_marginBottom="24dp"
                 android:padding="8dp"
                 android:text="@string/forgot_password"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/text_label_light"
                 android:textStyle="bold"
-                android:textSize="14sp" />
+                android:textSize="15sp"
+                android:shadowColor="#CC000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="4" />
 
             <Button
                 android:id="@+id/btnLogin"

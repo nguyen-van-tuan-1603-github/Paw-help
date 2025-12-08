@@ -13,8 +13,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import com.example.paw_help.api.RetrofitClient;
+import com.example.paw_help.models.ApiResponse;
+import com.example.paw_help.models.DashboardStats;
+import com.example.paw_help.models.PostItem;
+import com.example.paw_help.models.PostListResponse;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements RescuePostAdapter.OnPostClickListener {
 
@@ -28,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements RescuePostAdapter
     private RescuePostAdapter adapter;
     private List<RescuePost> rescuePosts;
     private ActivityResultLauncher<Intent> addPostLauncher;
+    private RetrofitClient retrofitClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +59,9 @@ public class MainActivity extends AppCompatActivity implements RescuePostAdapter
             }
         );
 
+        // Khởi tạo RetrofitClient
+        retrofitClient = RetrofitClient.getInstance(this);
+        
         initViews();
         setupRecyclerView();
         loadRescuePosts();
@@ -103,64 +118,98 @@ public class MainActivity extends AppCompatActivity implements RescuePostAdapter
     }
 
     private void loadRescuePosts() {
-        // Sample data - replace with actual database/API data
-        rescuePosts.clear();
-
-        rescuePosts.add(new RescuePost(
-                "1",
-                "Phát hiện chó con bị thương ở chân, cần cứu hộ gấp!",
-                "Số 123 Đường Lê Lợi, Quận Hải Châu",
-                "🐕",
-                "Chờ cứu",
-                "2 giờ trước",
-                R.drawable.cho,
-                "user1",
-                "Nguyễn Văn A"
-        ));
-
-        rescuePosts.add(new RescuePost(
-                "2",
-                "Mèo con bị bỏ rơi trong thùng carton, đang đói lạnh",
-                "Gần chợ Hàn, Đà Nẵng",
-                "🐱",
-                "Đang xử lý",
-                "5 giờ trước",
-                R.drawable.meo,
-                "user2",
-                "Trần Thị B"
-        ));
-
-        rescuePosts.add(new RescuePost(
-                "3",
-                "Chó lớn bị xe đâm, cần đưa đi bệnh viện khẩn cấp",
-                "Đường Nguyễn Văn Linh, Thanh Khê",
-                "🐕",
-                "Đã cứu",
-                "1 ngày trước",
-                R.drawable.cuucho,
-                "user3",
-                "Lê Văn C"
-        ));
-
-        adapter.notifyDataSetChanged();
+        // Gọi API để load posts
+        Call<ApiResponse<PostListResponse>> call = retrofitClient.getApi().getPosts(1, 20);
+        
+        call.enqueue(new Callback<ApiResponse<PostListResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<PostListResponse>> call, Response<ApiResponse<PostListResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<PostListResponse> apiResponse = response.body();
+                    
+                    if (apiResponse.isSuccess()) {
+                        PostListResponse postListResponse = apiResponse.getData();
+                        
+                        // Clear và convert posts từ API sang RescuePost
+                        rescuePosts.clear();
+                        
+                        for (PostItem item : postListResponse.getItems()) {
+                            // Convert PostItem từ API sang RescuePost
+                            String emoji = item.getAnimalType() != null ? item.getAnimalType().getTypeEmoji() : "🐾";
+                            String statusVN = convertStatus(item.getStatus());
+                            
+                            RescuePost post = new RescuePost(
+                                String.valueOf(item.getPostId()),
+                                item.getTitle(),
+                                item.getLocation(),
+                                emoji,
+                                statusVN,
+                                formatTime(item.getCreatedAt()),
+                                R.drawable.cho, // Default image, sau này có thể load từ URL
+                                String.valueOf(item.getUser().getUserId()),
+                                item.getUser().getFullName()
+                            );
+                            
+                            rescuePosts.add(post);
+                        }
+                        
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(MainActivity.this, "Không thể tải dữ liệu", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "Lỗi kết nối server", Toast.LENGTH_SHORT).show();
+                }
+            }
+            
+            @Override
+            public void onFailure(Call<ApiResponse<PostListResponse>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    
+    // Helper methods
+    private String convertStatus(String status) {
+        switch (status) {
+            case "waiting": return "Chờ cứu";
+            case "processing": return "Đang xử lý";
+            case "rescued": return "Đã cứu";
+            case "cancelled": return "Đã hủy";
+            default: return status;
+        }
+    }
+    
+    private String formatTime(String createdAt) {
+        // Tạm thời trả về string đơn giản, sau này có thể format đẹp hơn
+        return "Vừa xong";
     }
 
     private void updateStatistics() {
-        // Count posts by status
-        int sosCount = 0;
-        int rescuedCount = 0;
-
-        for (RescuePost post : rescuePosts) {
-            if (post.getStatus().equals("Chờ cứu")) {
-                sosCount++;
-            } else if (post.getStatus().equals("Đã cứu")) {
-                rescuedCount++;
+        // Gọi API để lấy thống kê
+        Call<ApiResponse<DashboardStats>> call = retrofitClient.getApi().getDashboardStats();
+        
+        call.enqueue(new Callback<ApiResponse<DashboardStats>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<DashboardStats>> call, Response<ApiResponse<DashboardStats>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<DashboardStats> apiResponse = response.body();
+                    
+                    if (apiResponse.isSuccess()) {
+                        DashboardStats stats = apiResponse.getData();
+                        
+                        tvSosCount.setText(String.valueOf(stats.getSosCount()));
+                        tvRescuedCount.setText(String.valueOf(stats.getRescuedCount()));
+                        tvTotalCount.setText(String.valueOf(stats.getTotalPosts()));
+                    }
+                }
             }
-        }
-
-        tvSosCount.setText(String.valueOf(sosCount));
-        tvRescuedCount.setText(String.valueOf(rescuedCount));
-        tvTotalCount.setText(String.valueOf(rescuePosts.size()));
+            
+            @Override
+            public void onFailure(Call<ApiResponse<DashboardStats>> call, Throwable t) {
+                // Không hiển thị lỗi cho stats, chỉ log
+            }
+        });
     }
 
     @Override
