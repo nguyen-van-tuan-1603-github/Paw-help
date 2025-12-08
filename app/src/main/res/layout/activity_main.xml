@@ -143,8 +143,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Cần cứu"
-                            android:textColor="#E91E63"
-                            android:textSize="12sp"
+                            android:textColor="#C2185B"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
                             android:layout_marginTop="4dp" />
 
                         <TextView
@@ -152,9 +153,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="5"
-                            android:textSize="20sp"
+                            android:textSize="28sp"
                             android:textStyle="bold"
-                            android:textColor="#E91E63" />
+                            android:textColor="#C2185B" />
                     </LinearLayout>
 
                     <View
@@ -180,8 +181,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Đã cứu"
-                            android:textColor="#4CAF50"
-                            android:textSize="12sp"
+                            android:textColor="#2E7D32"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
                             android:layout_marginTop="4dp" />
 
                         <TextView
@@ -189,9 +191,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="23"
-                            android:textSize="20sp"
+                            android:textSize="28sp"
                             android:textStyle="bold"
-                            android:textColor="#4CAF50" />
+                            android:textColor="#2E7D32" />
                     </LinearLayout>
 
                     <View
@@ -217,8 +219,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Tổng số"
-                            android:textColor="#2196F3"
-                            android:textSize="12sp"
+                            android:textColor="#1565C0"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
                             android:layout_marginTop="4dp" />
 
                         <TextView
@@ -226,9 +229,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="28"
-                            android:textSize="20sp"
+                            android:textSize="28sp"
                             android:textStyle="bold"
-                            android:textColor="#2196F3" />
+                            android:textColor="#1565C0" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -276,9 +279,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tin cứu hộ gần đây"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@color/text_primary"
+                android:textColor="@color/text_primary_dark"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="12dp" />
 

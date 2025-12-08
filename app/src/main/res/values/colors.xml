@@ -37,13 +37,19 @@
     <color name="surface_dark">#424242</color>
     <color name="card_dark_gray">#424242</color>
 
-    <!-- Text Colors -->
-    <color name="text_primary">#00796B</color>
-    <color name="text_primary_dark">#212121</color>
-    <color name="text_secondary">#757575</color>
-    <color name="text_link">#2196F3</color>
+    <!-- Text Colors - SUPER BOLD & BRIGHT -->
+    <color name="text_primary">#00695C</color>
+    <color name="text_primary_dark">#000000</color>
+    <color name="text_secondary">#263238</color>
+    <color name="text_link">#0D47A1</color>
     <color name="text_on_dark">#FFFFFF</color>
-    <color name="text_secondary_on_dark">#B0B0B0</color>
+    <color name="text_secondary_on_dark">#FFFFFF</color>
+    <color name="text_label_dark">#000000</color>
+    <color name="text_label_light">#FFFFFF</color>
+    <color name="text_hint">#757575</color>
+    <color name="text_bold">#000000</color>
+    <color name="text_accent">#FF6D00</color>
+    <color name="text_highlight">#FFD600</color>
 
     <!-- Legacy Support -->
     <color name="button_primary">#009688</color>

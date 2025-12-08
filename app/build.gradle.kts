@@ -48,6 +48,16 @@ dependencies {
     // ViewPager2 for better UI
     implementation("androidx.viewpager2:viewpager2:1.0.0")
 
+    // Retrofit for API calls
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    
+    // OkHttp for logging
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+    
+    // Gson for JSON parsing
+    implementation("com.google.code.gson:gson:2.10.1")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

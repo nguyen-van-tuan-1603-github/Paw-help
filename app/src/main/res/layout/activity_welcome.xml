@@ -32,13 +32,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/app_name"
-                android:textSize="32sp"
+                android:textSize="36sp"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold"
-                android:shadowColor="#40000000"
-                android:shadowDx="2"
-                android:shadowDy="2"
-                android:shadowRadius="4"
+                android:shadowColor="#CC000000"
+                android:shadowDx="4"
+                android:shadowDy="4"
+                android:shadowRadius="8"
+                android:letterSpacing="0.08"
                 android:layout_marginTop="8dp" />
 
             <TextView
@@ -46,8 +47,13 @@
                 android:layout_height="wrap_content"
                 android:text="@string/welcome_message"
                 android:gravity="center"
-                android:textColor="#E0FFFFFF"
-                android:textSize="15sp"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:shadowColor="#80000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="4"
                 android:layout_marginTop="8dp" />
 
             <ImageView

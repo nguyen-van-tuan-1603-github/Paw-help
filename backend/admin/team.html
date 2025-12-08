@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đội ngũ - PawHelp Admin</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="admin-panel">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-paw"></i>
+            <h2>PawHelp</h2>
+            <button class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="posts.html" class="nav-item">
+                <i class="fas fa-newspaper"></i>
+                <span>Bài đăng cứu hộ</span>
+            </a>
+            <a href="users.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Người dùng</span>
+            </a>
+            <a href="notifications.html" class="nav-item">
+                <i class="fas fa-bell"></i>
+                <span>Thông báo</span>
+            </a>
+            <a href="team.html" class="nav-item active">
+                <i class="fas fa-user-tie"></i>
+                <span>Đội ngũ</span>
+            </a>
+            <a href="#" class="nav-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng xuất</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="content-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Quản lý đội ngũ</h1>
+            </div>
+        </header>
+
+        <div class="content-body">
+            <!-- Actions -->
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <button class="btn btn-primary" onclick="loadTeam()">
+                        <i class="fas fa-sync-alt"></i> Làm mới
+                    </button>
+                </div>
+            </div>
+
+            <!-- Team Members Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;" id="teamGrid">
+                <div style="text-align: center; padding: 40px; grid-column: 1 / -1;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 32px; color: #00897B;"></i>
+                    <p style="margin-top: 15px; color: #757575;">Đang tải...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        // Load team members
+        async function loadTeam() {
+            const teamGrid = document.getElementById('teamGrid');
+            teamGrid.innerHTML = `
+                <div style="text-align: center; padding: 40px; grid-column: 1 / -1;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 32px; color: #00897B;"></i>
+                    <p style="margin-top: 15px; color: #757575;">Đang tải...</p>
+                </div>
+            `;
+            
+            try {
+                const response = await apiGet(API_ENDPOINTS.TEAM);
+                
+                if (response.success && response.data.length > 0) {
+                    teamGrid.innerHTML = response.data.map(member => `
+                        <div style="background: white; border-radius: 12px; padding: 24px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.05)';">
+                            ${member.avatarUrl ? `
+                                <img src="${API_BASE_URL.replace('/api', '')}${member.avatarUrl}" 
+                                     alt="${member.name}" 
+                                     style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 4px solid #00897B;">
+                            ` : `
+                                <div style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #00897B, #00695C); color: white; display: inline-flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 700; margin-bottom: 15px;">
+                                    ${getInitials(member.name)}
+                                </div>
+                            `}
+                            <h3 style="font-size: 18px; margin-bottom: 8px; color: #212121;">${member.name}</h3>
+                            <p style="color: #00897B; font-weight: 600; margin-bottom: 12px; font-size: 14px;">${member.position}</p>
+                            <p style="color: #757575; font-size: 14px; line-height: 1.6; margin: 0;">${member.description || ''}</p>
+                        </div>
+                    `).join('');
+                } else {
+                    teamGrid.innerHTML = `
+                        <div style="text-align: center; padding: 40px; grid-column: 1 / -1;">
+                            <i class="fas fa-users" style="font-size: 48px; color: #E0E0E0; margin-bottom: 15px;"></i>
+                            <p style="color: #757575;">Chưa có thành viên nào</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading team:', error);
+                teamGrid.innerHTML = `
+                    <div style="text-align: center; padding: 40px; grid-column: 1 / -1;">
+                        <i class="fas fa-exclamation-circle" style="font-size: 48px; color: #F44336; margin-bottom: 15px;"></i>
+                        <p style="color: #F44336;">Lỗi khi tải danh sách đội ngũ</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            loadTeam();
+        });
+    </script>
+</body>
+</html>
+

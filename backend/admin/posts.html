@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý bài đăng - PawHelp Admin</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="admin-panel">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-paw"></i>
+            <h2>PawHelp</h2>
+            <button class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="posts.html" class="nav-item active">
+                <i class="fas fa-newspaper"></i>
+                <span>Bài đăng cứu hộ</span>
+            </a>
+            <a href="users.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Người dùng</span>
+            </a>
+            <a href="notifications.html" class="nav-item">
+                <i class="fas fa-bell"></i>
+                <span>Thông báo</span>
+            </a>
+            <a href="team.html" class="nav-item">
+                <i class="fas fa-user-tie"></i>
+                <span>Đội ngũ</span>
+            </a>
+            <a href="#" class="nav-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng xuất</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="content-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Quản lý bài đăng cứu hộ</h1>
+            </div>
+        </header>
+
+        <div class="content-body">
+            <!-- Filters -->
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <select id="statusFilter" onchange="filterPosts()">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="pending">Đang chờ</option>
+                        <option value="in_progress">Đang xử lý</option>
+                        <option value="rescued">Đã cứu hộ</option>
+                        <option value="closed">Đã đóng</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <input type="text" id="searchInput" placeholder="Tìm kiếm..." onkeyup="searchPosts()">
+                </div>
+                <div class="filter-group">
+                    <button class="btn btn-primary" onclick="loadPosts()">
+                        <i class="fas fa-sync-alt"></i> Làm mới
+                    </button>
+                </div>
+            </div>
+
+            <!-- Posts Table -->
+            <div class="table-card">
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th width="60">ID</th>
+                                <th>Ảnh</th>
+                                <th>Loại động vật</th>
+                                <th>Mô tả</th>
+                                <th>Địa điểm</th>
+                                <th>Trạng thái</th>
+                                <th>Người đăng</th>
+                                <th>Ngày tạo</th>
+                                <th width="150">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="postsTable">
+                            <tr>
+                                <td colspan="9" class="text-center">
+                                    <i class="fas fa-spinner fa-spin"></i> Đang tải...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination" id="pagination">
+                    <!-- Pagination will be rendered here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal xem chi tiết -->
+    <div id="viewModal" class="modal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3><i class="fas fa-eye"></i> Chi tiết bài đăng</h3>
+                <button class="modal-close" onclick="closeModal('viewModal')">&times;</button>
+            </div>
+            <div class="modal-body" id="modalViewBody">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal cập nhật trạng thái -->
+    <div id="statusModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Cập nhật trạng thái</h3>
+                <button class="modal-close" onclick="closeModal('statusModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="statusForm">
+                    <input type="hidden" id="editPostId">
+                    <div class="form-group">
+                        <label>Trạng thái mới:</label>
+                        <select id="newStatus" class="form-control">
+                            <option value="pending">Đang chờ</option>
+                            <option value="in_progress">Đang xử lý</option>
+                            <option value="rescued">Đã cứu hộ</option>
+                            <option value="closed">Đã đóng</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('statusModal')">Hủy</button>
+                        <button type="submit" class="btn btn-primary">Cập nhật</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/posts.js"></script>
+</body>
+</html>
+
