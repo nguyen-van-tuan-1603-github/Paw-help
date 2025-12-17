@@ -10,6 +10,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.paw_help.api.PawHelpApi;
+import com.example.paw_help.api.RetrofitClient;
+import com.example.paw_help.models.ApiResponse;
+import com.example.paw_help.models.PostItem;
+import com.example.paw_help.models.PostListResponse;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class TrangXemLichSuCuuHoActivity extends AppCompatActivity {
 
     private ImageView btnBack;
@@ -51,47 +61,48 @@ public class TrangXemLichSuCuuHoActivity extends AppCompatActivity {
     }
 
     private void loadHistoryData() {
-        // TODO: Load history from database/Firebase
-        // For now, add sample data
         historyList.clear();
 
-        // Sample data - using temporary placeholder images
-        // TODO: Replace with actual image loading from storage
-        historyList.add(new RescueHistory(
-            "1",
-            "Một chó con bị thương ở chân",
-            "Quận Hải Châu, Đà Nẵng",
-            "15/11/2025 - 14:30",
-            android.R.drawable.ic_menu_camera,
-            true
-        ));
+        RetrofitClient client = RetrofitClient.getInstance(this);
+        PawHelpApi api = client.getApi();
 
-        historyList.add(new RescueHistory(
-            "2",
-            "Mèo con bị kẹt trên cây cao",
-            "Quận Thanh Khê, Đà Nẵng",
-            "14/11/2025 - 10:15",
-            android.R.drawable.ic_menu_camera,
-            true
-        ));
+        Call<ApiResponse<PostListResponse>> call = api.getMyPosts();
+        call.enqueue(new Callback<ApiResponse<PostListResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<PostListResponse>> call,
+                                   Response<ApiResponse<PostListResponse>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    PostListResponse data = response.body().getData();
+                    if (data != null && data.getItems() != null) {
+                        for (PostItem item : data.getItems()) {
+                            historyList.add(new RescueHistory(
+                                    String.valueOf(item.getPostId()),
+                                    item.getDescription(),
+                                    item.getLocation(),
+                                    item.getCreatedAt(),
+                                    android.R.drawable.ic_menu_camera,
+                                    "rescued".equals(item.getStatus())
+                            ));
+                        }
+                    }
+                }
 
-        historyList.add(new RescueHistory(
-            "3",
-            "Chó lạc tìm chủ",
-            "Quận Sơn Trà, Đà Nẵng",
-            "13/11/2025 - 16:00",
-            android.R.drawable.ic_menu_gallery,
-            false
-        ));
+                if (historyList.isEmpty()) {
+                    tvEmptyHistory.setVisibility(View.VISIBLE);
+                    recyclerViewHistory.setVisibility(View.GONE);
+                } else {
+                    tvEmptyHistory.setVisibility(View.GONE);
+                    recyclerViewHistory.setVisibility(View.VISIBLE);
+                    historyAdapter.notifyDataSetChanged();
+                }
+            }
 
-        if (historyList.isEmpty()) {
-            tvEmptyHistory.setVisibility(View.VISIBLE);
-            recyclerViewHistory.setVisibility(View.GONE);
-        } else {
-            tvEmptyHistory.setVisibility(View.GONE);
-            recyclerViewHistory.setVisibility(View.VISIBLE);
-            historyAdapter.notifyDataSetChanged();
-        }
+            @Override
+            public void onFailure(Call<ApiResponse<PostListResponse>> call, Throwable t) {
+                tvEmptyHistory.setVisibility(View.VISIBLE);
+                recyclerViewHistory.setVisibility(View.GONE);
+            }
+        });
     }
 }
 

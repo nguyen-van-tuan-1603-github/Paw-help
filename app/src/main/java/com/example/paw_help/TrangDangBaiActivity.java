@@ -19,6 +19,15 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import java.io.IOException;
 
+import com.example.paw_help.api.PawHelpApi;
+import com.example.paw_help.api.RetrofitClient;
+import com.example.paw_help.models.ApiResponse;
+import com.example.paw_help.models.PostItem;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class TrangDangBaiActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_CODE = 100;
@@ -114,20 +123,39 @@ public class TrangDangBaiActivity extends AppCompatActivity {
             return;
         }
 
-        // TODO: Implement actual submission to database/server
-        Toast.makeText(this, "Đang xử lý bài đăng...", Toast.LENGTH_SHORT).show();
+        RetrofitClient client = RetrofitClient.getInstance(this);
+        PawHelpApi api = client.getApi();
 
-        // Simulate upload delay (remove in production)
-        new android.os.Handler().postDelayed(() -> {
-            // Show success message
-            Toast.makeText(this, "Đăng bài thành công!", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Đang gửi bài đăng...", Toast.LENGTH_SHORT).show();
 
-            // Trả về kết quả để MainActivity refresh
-            Intent resultIntent = new Intent();
-            resultIntent.putExtra("refresh", true);
-            setResult(RESULT_OK, resultIntent);
-            finish();
-        }, 1000);
+        Call<ApiResponse<PostItem>> call = api.createPost(
+                "Chó",          // tạm thời fix cứng, nếu cần có thể thêm chọn loại động vật
+                description,
+                location,
+                null,
+                null
+        );
+
+        call.enqueue(new Callback<ApiResponse<PostItem>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<PostItem>> call,
+                                   Response<ApiResponse<PostItem>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    Toast.makeText(TrangDangBaiActivity.this, "Đăng bài thành công!", Toast.LENGTH_LONG).show();
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("refresh", true);
+                    setResult(RESULT_OK, resultIntent);
+                    finish();
+                } else {
+                    Toast.makeText(TrangDangBaiActivity.this, "Đăng bài thất bại", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<PostItem>> call, Throwable t) {
+                Toast.makeText(TrangDangBaiActivity.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
 

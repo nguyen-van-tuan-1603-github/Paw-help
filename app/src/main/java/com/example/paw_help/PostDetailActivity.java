@@ -10,6 +10,15 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.example.paw_help.api.PawHelpApi;
+import com.example.paw_help.api.RetrofitClient;
+import com.example.paw_help.models.ApiResponse;
+import com.example.paw_help.models.PostItem;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class PostDetailActivity extends AppCompatActivity {
 
     private CardView btnBack, btnShare, btnCall, btnReport;
@@ -29,7 +38,7 @@ public class PostDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_post_detail);
 
         initViews();
-        loadPostData();
+        loadPostFromApi();
         setupListeners();
     }
 
@@ -45,28 +54,64 @@ public class PostDetailActivity extends AppCompatActivity {
         btnRescue = findViewById(R.id.btnRescue);
     }
 
-    private void loadPostData() {
-        // Get data from intent
+    private void loadPostFromApi() {
         Intent intent = getIntent();
-        postId = intent.getStringExtra("post_id");
-        postTitle = intent.getStringExtra("description");
-        postLocation = intent.getStringExtra("location");
-        postStatus = intent.getStringExtra("status");
-        contactPhone = intent.getStringExtra("phone");
+        String idStr = intent.getStringExtra("post_id");
+        if (idStr == null) {
+            Toast.makeText(this, "Không tìm thấy ID bài đăng", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
-        // Set default values if null
-        if (postTitle == null) postTitle = "Phát hiện động vật cần cứu hộ";
-        if (postLocation == null) postLocation = "Đà Nẵng";
-        if (postStatus == null) postStatus = "Mới cần cứu hộ";
-        if (contactPhone == null) contactPhone = "0123456789";
+        int id;
+        try {
+            id = Integer.parseInt(idStr);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "ID bài đăng không hợp lệ", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
-        // Display data
-        tvTitle.setText(postTitle);
-        tvLocation.setText(postLocation);
-        tvStatus.setText(postStatus);
+        RetrofitClient client = RetrofitClient.getInstance(this);
+        PawHelpApi api = client.getApi();
 
-        // TODO: Load image from URL or resource
-        // For now using default image in layout
+        Call<ApiResponse<PostItem>> call = api.getPost(id);
+        call.enqueue(new Callback<ApiResponse<PostItem>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<PostItem>> call,
+                                   Response<ApiResponse<PostItem>> response) {
+                if (!response.isSuccessful() || response.body() == null || !response.body().isSuccess()) {
+                    Toast.makeText(PostDetailActivity.this, "Không tải được chi tiết bài đăng", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                PostItem item = response.body().getData();
+                if (item == null) {
+                    Toast.makeText(PostDetailActivity.this, "Bài đăng không tồn tại", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                postId = String.valueOf(item.getPostId());
+                postTitle = item.getDescription();
+                postLocation = item.getLocation();
+                postStatus = item.getStatus();
+                contactPhone = item.getContactPhone();
+
+                if (postTitle == null) postTitle = "Phát hiện động vật cần cứu hộ";
+                if (postLocation == null) postLocation = "Đà Nẵng";
+                if (postStatus == null) postStatus = "Mới cần cứu hộ";
+                if (contactPhone == null) contactPhone = "0123456789";
+
+                tvTitle.setText(postTitle);
+                tvLocation.setText(postLocation);
+                tvStatus.setText(postStatus);
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<PostItem>> call, Throwable t) {
+                Toast.makeText(PostDetailActivity.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setupListeners() {
