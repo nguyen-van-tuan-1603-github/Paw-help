@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.paw_help.api.RetrofitClient;
+
 public class SplashActivity extends AppCompatActivity {
 
     private static final int SPLASH_DURATION = 3000; // 3 seconds
@@ -54,7 +56,6 @@ public class SplashActivity extends AppCompatActivity {
     private void navigateToNextScreen() {
         new Handler().postDelayed(() -> {
             // Check if user is logged in
-            // TODO: Check SharedPreferences or Firebase for logged in user
             boolean isLoggedIn = checkIfUserLoggedIn();
 
             Intent intent;
@@ -72,9 +73,8 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private boolean checkIfUserLoggedIn() {
-        // TODO: Implement actual login check
-        // For now, return false to always show welcome screen
-        return false;
+        RetrofitClient client = RetrofitClient.getInstance(this);
+        return client.isLoggedIn();
     }
 }
 

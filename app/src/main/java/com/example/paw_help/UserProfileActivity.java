@@ -10,6 +10,15 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.paw_help.api.PawHelpApi;
+import com.example.paw_help.api.RetrofitClient;
+import com.example.paw_help.models.ApiResponse;
+import com.example.paw_help.models.User;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class UserProfileActivity extends AppCompatActivity {
 
     private ImageView btnBack, imgUserAvatar;
@@ -50,13 +59,44 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void loadUserData() {
-        // Load user data from SharedPreferences or Firebase
-        SharedPreferences prefs = getSharedPreferences("PawHelpPrefs", MODE_PRIVATE);
-        String email = prefs.getString("user_email", "abc123@gmail.com");
-        String phone = prefs.getString("user_phone", "Chưa cập nhật");
+        RetrofitClient client = RetrofitClient.getInstance(this);
+        PawHelpApi api = client.getApi();
 
-        tvUserEmail.setText(email);
-        tvUserPhone.setText(phone);
+        Call<ApiResponse<User>> call = api.getProfile();
+        call.enqueue(new Callback<ApiResponse<User>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<User>> call,
+                                   Response<ApiResponse<User>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    User user = response.body().getData();
+                    if (user != null) {
+                        tvUserEmail.setText(user.getEmail());
+                        String phone = user.getPhone();
+                        tvUserPhone.setText(phone != null && !phone.isEmpty()
+                                ? phone : "Chưa cập nhật");
+                        return;
+                    }
+                }
+
+                // Fallback: SharedPreferences nếu gọi API lỗi
+                SharedPreferences prefs = getSharedPreferences("PawHelpPrefs", MODE_PRIVATE);
+                String email = prefs.getString("user_email", "abc123@gmail.com");
+                String phone = prefs.getString("user_phone", "Chưa cập nhật");
+
+                tvUserEmail.setText(email);
+                tvUserPhone.setText(phone);
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
+                SharedPreferences prefs = getSharedPreferences("PawHelpPrefs", MODE_PRIVATE);
+                String email = prefs.getString("user_email", "abc123@gmail.com");
+                String phone = prefs.getString("user_phone", "Chưa cập nhật");
+
+                tvUserEmail.setText(email);
+                tvUserPhone.setText(phone);
+            }
+        });
     }
 
     private void showLogoutDialog() {

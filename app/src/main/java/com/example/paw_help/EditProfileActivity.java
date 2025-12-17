@@ -1,6 +1,5 @@
 package com.example.paw_help;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,6 +10,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.button.MaterialButton;
+
+import com.example.paw_help.api.PawHelpApi;
+import com.example.paw_help.api.RetrofitClient;
+import com.example.paw_help.models.ApiResponse;
+import com.example.paw_help.models.User;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -118,18 +126,35 @@ public class EditProfileActivity extends AppCompatActivity {
             return;
         }
 
-        // Save to SharedPreferences
-        SharedPreferences prefs = getSharedPreferences("PawHelpPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("user_name", fullName);
-        editor.putString("user_phone", phone);
-        editor.putString("user_gender", selectedGender);
-        editor.apply();
+        RetrofitClient client = RetrofitClient.getInstance(this);
+        PawHelpApi api = client.getApi();
 
-        Toast.makeText(this, "Đã lưu thông tin thành công!", Toast.LENGTH_SHORT).show();
+        Call<ApiResponse<User>> call = api.updateProfile(fullName, phone);
+        call.enqueue(new Callback<ApiResponse<User>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<User>> call,
+                                   Response<ApiResponse<User>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    // Cập nhật local để UserProfileActivity có thể dùng fallback
+                    SharedPreferences prefs = getSharedPreferences("PawHelpPrefs", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("user_name", fullName);
+                    editor.putString("user_phone", phone);
+                    editor.putString("user_gender", selectedGender);
+                    editor.apply();
 
-        // Return to profile screen
-        finish();
+                    Toast.makeText(EditProfileActivity.this, "Đã lưu thông tin thành công!", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(EditProfileActivity.this, "Cập nhật thất bại", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
+                Toast.makeText(EditProfileActivity.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
 
