@@ -1,111 +1,85 @@
-#!/usr/bin/env node
-
-/**
- * Script to create admin user for PawHelp
- * Usage: node scripts/create-admin.js
- */
-
-const readline = require('readline');
-const bcrypt = require('bcryptjs');
-const mysql = require('mysql2/promise');
 require('dotenv').config();
+const mysql = require('mysql2/promise');
+const bcrypt = require('bcryptjs');
 
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-
-function question(query) {
-    return new Promise(resolve => rl.question(query, resolve));
-}
+const dbConfig = {
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT) || 3306,
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'pawhelp_db',
+    multipleStatements: true
+};
 
 async function createAdmin() {
-    console.log('\n🐾 ===== PawHelp - Create Admin User ===== 🐾\n');
-    
+    let connection;
+
     try {
-        // Get user input
-        const fullName = await question('👤 Tên đầy đủ: ');
-        const email = await question('📧 Email: ');
-        const phone = await question('📱 Số điện thoại: ');
-        const password = await question('🔒 Mật khẩu: ');
-        
-        if (!fullName || !email || !phone || !password) {
-            throw new Error('Vui lòng điền đầy đủ thông tin');
-        }
-        
-        // Validate email
-        if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-            throw new Error('Email không hợp lệ');
-        }
-        
-        // Validate password
-        if (password.length < 6) {
-            throw new Error('Mật khẩu phải có ít nhất 6 ký tự');
-        }
-        
-        console.log('\n⏳ Đang xử lý...\n');
-        
-        // Connect to database
-        const connection = await mysql.createConnection({
-            host: process.env.DB_HOST || 'localhost',
-            port: process.env.DB_PORT || 3306,
-            user: process.env.DB_USER || 'root',
-            password: process.env.DB_PASSWORD || '',
-            database: process.env.DB_NAME || 'pawhelp_db'
-        });
-        
-        console.log('✅ Kết nối database thành công');
-        
-        // Check if email exists
-        const [existing] = await connection.query(
-            'SELECT email FROM users WHERE email = ?',
-            [email]
+        connection = await mysql.createConnection(dbConfig);
+        console.log('✅ Đã kết nối database thành công!');
+
+        const adminEmail = 'admin@pawhelp.com';
+        const adminPassword = '123456';
+
+        // Check if admin exists
+        const [existingAdmins] = await connection.query(
+            'SELECT user_id, email FROM users WHERE email = ?',
+            [adminEmail]
         );
-        
-        if (existing.length > 0) {
-            throw new Error('Email đã tồn tại trong hệ thống');
+
+        if (existingAdmins.length > 0) {
+            console.log('⚠️  Admin đã tồn tại. Đang cập nhật password...');
+            
+            // Update password
+            const hashedPassword = await bcrypt.hash(adminPassword, 10);
+            await connection.query(
+                'UPDATE users SET password_hash = ?, user_role = ? WHERE email = ?',
+                [hashedPassword, 'admin', adminEmail]
+            );
+            
+            console.log('✅ Đã cập nhật password cho admin!');
+        } else {
+            console.log('📝 Đang tạo tài khoản admin...');
+            
+            // Create admin
+            const hashedPassword = await bcrypt.hash(adminPassword, 10);
+            await connection.query(
+                `INSERT INTO users (full_name, email, phone, password_hash, user_role, created_at) 
+                 VALUES (?, ?, ?, ?, 'admin', NOW())`,
+                ['Admin PawHelp', adminEmail, '0900000000', hashedPassword]
+            );
+            
+            console.log('✅ Đã tạo tài khoản admin thành công!');
         }
-        
-        // Hash password
-        const passwordHash = await bcrypt.hash(password, 10);
-        console.log('✅ Hash password thành công');
-        
-        // Insert admin user
-        const [result] = await connection.query(
-            `INSERT INTO users (full_name, email, phone, password_hash, user_role, created_at) 
-             VALUES (?, ?, ?, ?, 'admin', NOW())`,
-            [fullName, email, phone, passwordHash]
+
+        // Verify admin account
+        const [admins] = await connection.query(
+            'SELECT user_id, full_name, email, user_role FROM users WHERE email = ?',
+            [adminEmail]
         );
-        
-        console.log('✅ Tạo tài khoản admin thành công');
-        console.log(`\n📊 Thông tin tài khoản:\n`);
-        console.log(`   ID: ${result.insertId}`);
-        console.log(`   Tên: ${fullName}`);
-        console.log(`   Email: ${email}`);
-        console.log(`   Số điện thoại: ${phone}`);
-        console.log(`   Vai trò: Admin`);
-        console.log('\n🎉 Hoàn thành! Bạn có thể đăng nhập vào Admin Panel ngay bây giờ.\n');
-        
-        await connection.end();
-        rl.close();
-        
+
+        if (admins.length > 0) {
+            const admin = admins[0];
+            console.log('\n📌 Thông tin đăng nhập Admin:');
+            console.log(`   Email: ${admin.email}`);
+            console.log(`   Password: ${adminPassword}`);
+            console.log(`   Role: ${admin.user_role}`);
+            console.log(`   User ID: ${admin.user_id}`);
+        }
+
     } catch (error) {
-        console.error('\n❌ Lỗi:', error.message);
-        console.error('\n💡 Giải pháp:');
-        
-        if (error.message.includes('connect')) {
-            console.error('   - Kiểm tra MySQL đã chạy chưa');
-            console.error('   - Kiểm tra thông tin trong file .env');
-        } else if (error.message.includes('Email đã tồn tại')) {
-            console.error('   - Sử dụng email khác');
-            console.error('   - Hoặc update role: UPDATE users SET user_role = "admin" WHERE email = "' + email + '"');
+        console.error('❌ Lỗi khi tạo admin:', error.message);
+        if (error.code === 'ER_BAD_DB_ERROR') {
+            console.error('   ⚠️  Database chưa được tạo. Hãy chạy: npm run init-db');
+        } else if (error.code === 'ER_ACCESS_DENIED_ERROR') {
+            console.error('   ⚠️  Lỗi kết nối database. Kiểm tra lại DB_PASSWORD trong .env');
         }
-        
-        rl.close();
         process.exit(1);
+    } finally {
+        if (connection) {
+            await connection.end();
+        }
     }
 }
 
-// Run
 createAdmin();
-

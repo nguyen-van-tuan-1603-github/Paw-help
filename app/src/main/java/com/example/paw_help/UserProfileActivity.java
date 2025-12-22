@@ -109,19 +109,21 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void performLogout() {
-        // Clear user session
+        // Clear user session using RetrofitClient
+        RetrofitClient client = RetrofitClient.getInstance(this);
+        client.logout();
+        
+        // Clear any other SharedPreferences if needed
         SharedPreferences prefs = getSharedPreferences("PawHelpPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.clear();
-        editor.apply();
+        prefs.edit().clear().apply();
 
-        // Navigate to welcome screen
-        Intent intent = new Intent(UserProfileActivity.this, WelcomeActivity.class);
+        Toast.makeText(this, "Đã đăng xuất thành công", Toast.LENGTH_SHORT).show();
+
+        // Navigate to login screen - clear task stack to prevent back navigation
+        Intent intent = new Intent(UserProfileActivity.this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
-
-        Toast.makeText(this, "Đã đăng xuất thành công", Toast.LENGTH_SHORT).show();
     }
 
     @Override

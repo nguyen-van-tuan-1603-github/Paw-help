@@ -18,8 +18,10 @@ public class RetrofitClient {
     // ⚠️ QUAN TRỌNG: Đổi BASE_URL phù hợp với môi trường
     // Emulator: http://10.0.2.2:5125/api/
     // Thiết bị thật: http://192.168.X.X:5125/api/ (IP máy tính)
-    private static final String BASE_URL = "http://10.0.2.2:5125/api/";
-    
+    // IP máy tính hiện tại: 192.168.1.11 (từ ipconfig)
+    private static final String BASE_URL = "http://192.168.1.11:5125/api/";
+    // Nếu dùng emulator, đổi thành: http://10.0.2.2:5125/api/
+
     private static RetrofitClient instance;
     private PawHelpApi api;
     private Context context;

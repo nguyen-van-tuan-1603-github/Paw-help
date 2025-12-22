@@ -60,6 +60,15 @@ public class MainActivity extends AppCompatActivity implements RescuePostAdapter
 
         // Khởi tạo RetrofitClient
         retrofitClient = RetrofitClient.getInstance(this);
+        
+        // Kiểm tra đăng nhập - nếu chưa đăng nhập thì chuyển về LoginActivity
+        if (!retrofitClient.isLoggedIn()) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+            return;
+        }
 
         initViews();
         setupRecyclerView();
@@ -118,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements RescuePostAdapter
 
     private void loadRescuePosts() {
         // Gọi API để load posts
-        Call<ApiResponse<PostListResponse>> call = retrofitClient.getApi().getPosts(1, 20);
+        Call<ApiResponse<PostListResponse>> call = retrofitClient.getApi().getPosts(1, 20, null);
 
         call.enqueue(new Callback<ApiResponse<PostListResponse>>() {
             @Override

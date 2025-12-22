@@ -144,16 +144,11 @@ public class RegisterActivity extends AppCompatActivity {
                     ApiResponse<AuthResponse> apiResponse = response.body();
                     
                     if (apiResponse.isSuccess()) {
-                        AuthResponse authResponse = apiResponse.getData();
+                        // Đăng ký thành công - chuyển sang màn hình đăng nhập
+                        Toast.makeText(RegisterActivity.this, "Đăng ký thành công! Vui lòng đăng nhập.", Toast.LENGTH_LONG).show();
                         
-                        // Lưu token và user info
-                        retrofitClient.saveToken(authResponse.getToken());
-                        retrofitClient.saveUser(authResponse.getUser());
-                        
-                        Toast.makeText(RegisterActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
-                        
-                        // Chuyển sang MainActivity
-                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                        // Chuyển sang LoginActivity
+                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();
