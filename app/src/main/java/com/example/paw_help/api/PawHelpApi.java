@@ -1,8 +1,10 @@
 package com.example.paw_help.api;
 
 import com.example.paw_help.models.*;
+import com.example.paw_help.TeamMember;
 import retrofit2.Call;
 import retrofit2.http.*;
+import java.util.List;
 
 public interface PawHelpApi {
     
@@ -22,7 +24,8 @@ public interface PawHelpApi {
     @GET("posts")
     Call<ApiResponse<PostListResponse>> getPosts(
         @Query("page") int page,
-        @Query("limit") int limit
+        @Query("limit") int limit,
+        @Query("status") String status
     );
     
     @GET("posts/{id}")
@@ -41,7 +44,21 @@ public interface PawHelpApi {
         @Field("latitude") Double latitude,
         @Field("longitude") Double longitude
     );
-    
+
+    // Guest report (không cần authentication)
+    @FormUrlEncoded
+    @POST("posts/guest-report")
+    Call<ApiResponse<GuestReportResponse>> createGuestReport(
+        @Field("fullName") String fullName,
+        @Field("phone") String phone,
+        @Field("email") String email,
+        @Field("address") String address,
+        @Field("animalType") String animalType,
+        @Field("condition") String condition,
+        @Field("description") String description,
+        @Field("dateTime") String dateTime
+    );
+
     // ==================== USER PROFILE ====================
     
     @GET("users/profile")
@@ -58,6 +75,14 @@ public interface PawHelpApi {
     
     @GET("dashboard/stats")
     Call<ApiResponse<DashboardStats>> getDashboardStats();
+
+    @GET("dashboard/user-stats")
+    Call<ApiResponse<DashboardStats>> getUserStats();
+
+    // ==================== TEAM ====================
+
+    @GET("team")
+    Call<ApiResponse<List<TeamMember>>> getTeamMembers();
 
     // ==================== NOTIFICATIONS ====================
 

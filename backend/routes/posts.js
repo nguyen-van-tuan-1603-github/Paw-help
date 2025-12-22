@@ -159,6 +159,72 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// ==================== CREATE GUEST REPORT (NO AUTH) ====================
+
+router.post('/guest-report', async (req, res) => {
+    try {
+        const {
+            fullName,
+            phone,
+            email,
+            address,
+            animalType,
+            condition,
+            description,
+            dateTime
+        } = req.body;
+
+        // Validation
+        if (!fullName || !phone || !address || !animalType || !description) {
+            return res.status(400).json({
+                success: false,
+                error: {
+                    code: 'VALIDATION_ERROR',
+                    message: 'Thiếu thông tin bắt buộc'
+                }
+            });
+        }
+
+        // Format full description with guest info
+        const fullDescription = `[BÁO CÁO TỪ KHÁCH]\n` +
+            `Họ tên: ${fullName}\n` +
+            `Số điện thoại: ${phone}\n` +
+            (email ? `Email: ${email}\n` : '') +
+            `Tình trạng: ${condition || 'Không xác định'}\n` +
+            (dateTime ? `Thời gian phát hiện: ${dateTime}\n` : '') +
+            `\nMô tả chi tiết:\n${description}`;
+
+        // Insert as guest report (user_id = NULL or create a guest user)
+        // We'll use NULL for user_id to indicate guest report
+        const [result] = await db.query(`
+            INSERT INTO rescue_posts
+            (user_id, animal_type, description, location, status, created_at)
+            VALUES (NULL, ?, ?, ?, 'pending', NOW())
+        `, [animalType, fullDescription, address]);
+
+        const postId = result.insertId;
+
+        res.status(201).json({
+            success: true,
+            message: 'Gửi báo cáo thành công',
+            data: {
+                postId: postId,
+                requestId: `RQ${postId}${Date.now() % 1000}`
+            }
+        });
+
+    } catch (error) {
+        console.error('Guest report error:', error);
+        res.status(500).json({
+            success: false,
+            error: {
+                code: 'SERVER_ERROR',
+                message: 'Lỗi khi gửi báo cáo'
+            }
+        });
+    }
+});
+
 // ==================== CREATE POST ====================
 
 router.post('/', authenticate, upload.single('image'), async (req, res) => {

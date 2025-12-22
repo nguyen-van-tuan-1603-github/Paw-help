@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+
+import com.example.paw_help.api.RetrofitClient;
 
 public class TrangUserActivity extends AppCompatActivity {
 
@@ -103,9 +106,14 @@ public class TrangUserActivity extends AppCompatActivity {
             .setTitle("Đăng xuất")
             .setMessage("Bạn có chắc muốn đăng xuất?")
             .setPositiveButton("Đăng xuất", (dialog, which) -> {
-                // TODO: Clear user session data
-
-                Intent intent = new Intent(TrangUserActivity.this, WelcomeActivity.class);
+                // Clear user session using RetrofitClient
+                RetrofitClient client = RetrofitClient.getInstance(this);
+                client.logout();
+                
+                Toast.makeText(this, "Đã đăng xuất thành công", Toast.LENGTH_SHORT).show();
+                
+                // Navigate to login screen - clear task stack to prevent back navigation
+                Intent intent = new Intent(TrangUserActivity.this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();

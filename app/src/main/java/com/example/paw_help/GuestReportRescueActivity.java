@@ -20,6 +20,15 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import com.example.paw_help.api.PawHelpApi;
+import com.example.paw_help.api.RetrofitClient;
+import com.example.paw_help.models.ApiResponse;
+import com.example.paw_help.models.GuestReportResponse;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class GuestReportRescueActivity extends AppCompatActivity {
 
     private EditText edtFullName, edtPhone, edtEmail, edtAddress;
@@ -216,20 +225,119 @@ public class GuestReportRescueActivity extends AppCompatActivity {
                     "Chúng tôi sẽ liên hệ với bạn sớm nhất có thể.\n\n" +
                     "Bạn có chắc muốn gửi yêu cầu này?")
             .setPositiveButton("Gửi", (dialog, which) -> {
-                // TODO: Save to database or send to server
-                showSuccessDialog();
+                sendReportToServer(name, phone, address);
             })
             .setNegativeButton("Kiểm tra lại", (dialog, which) -> dialog.dismiss())
             .show();
     }
 
-    private void showSuccessDialog() {
+
+    private void sendReportToServer(String fullName, String phone, String address) {
+        // Get form data
+        String email = edtEmail.getText().toString().trim();
+        String description = edtDescription.getText().toString().trim();
+        String animalTypeText = spinnerAnimalType.getSelectedItem().toString();
+        String conditionText = spinnerCondition.getSelectedItem().toString();
+
+        // Extract animal type (remove emoji)
+        String animalType = animalTypeText.replaceAll("[🐕🐱🐦🐰🐹🦎]", "").trim();
+        if (animalType.isEmpty() || animalType.equals("Chọn loại động vật")) {
+            animalType = "Khác";
+        }
+
+        // Extract condition (remove emoji)
+        String condition = conditionText.replaceAll("[❗⚠️⚡📍🆘💧🤒]", "").trim();
+        if (condition.equals("Chọn tình trạng")) {
+            condition = "";
+        }
+
+        // Format date time
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+        String dateTimeStr = sdf.format(selectedDateTime.getTime());
+
+        // Show loading
+        btnSubmitReport.setEnabled(false);
+        btnSubmitReport.setText("Đang gửi...");
+
+        RetrofitClient client = RetrofitClient.getInstance(this);
+        PawHelpApi api = client.getApi();
+
+        // Use guest report endpoint (no authentication required)
+        Call<ApiResponse<GuestReportResponse>> call = api.createGuestReport(
+                fullName,
+                phone,
+                email.isEmpty() ? null : email,
+                address,
+                animalType,
+                condition,
+                description,
+                dateTimeStr
+        );
+
+        call.enqueue(new Callback<ApiResponse<GuestReportResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<GuestReportResponse>> call,
+                                   Response<ApiResponse<GuestReportResponse>> response) {
+                btnSubmitReport.setEnabled(true);
+                btnSubmitReport.setText("Gửi Yêu Cầu Cứu Hộ");
+
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    // Success
+                    GuestReportResponse data = response.body().getData();
+                    String requestId = data != null && data.getRequestId() != null ?
+                            data.getRequestId() : generateRequestId();
+                    showSuccessDialog(requestId);
+                } else {
+                    // Failed
+                    String errorMsg = "Không thể gửi báo cáo. Vui lòng thử lại.";
+                    if (response.body() != null) {
+                        ApiResponse<GuestReportResponse> apiResponse = response.body();
+                        if (apiResponse.getMessage() != null && !apiResponse.getMessage().isEmpty()) {
+                            errorMsg = apiResponse.getMessage();
+                        }
+                        if (apiResponse.getErrors() != null && !apiResponse.getErrors().isEmpty()) {
+                            errorMsg += "\n" + String.join("\n", apiResponse.getErrors());
+                        }
+                    }
+                    Toast.makeText(GuestReportRescueActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<GuestReportResponse>> call, Throwable t) {
+                btnSubmitReport.setEnabled(true);
+                btnSubmitReport.setText("Gửi Yêu Cầu Cứu Hộ");
+
+                // Network error - show helpful message
+                String errorMsg = "Không thể kết nối đến server.\n\n";
+                if (t instanceof java.net.SocketTimeoutException) {
+                    errorMsg += "Kiểm tra:\n" +
+                            "• Server có đang chạy không?\n" +
+                            "• Điện thoại và máy tính cùng WiFi?\n" +
+                            "• IP trong RetrofitClient đã đúng chưa?";
+                } else {
+                    errorMsg += "Lỗi: " + t.getMessage();
+                }
+
+                new AlertDialog.Builder(GuestReportRescueActivity.this)
+                    .setTitle("Lỗi kết nối")
+                    .setMessage(errorMsg)
+                    .setPositiveButton("Thử lại", (dialog, which) -> {
+                        sendReportToServer(fullName, phone, address);
+                    })
+                    .setNegativeButton("Đóng", null)
+                    .show();
+            }
+        });
+    }
+
+    private void showSuccessDialog(String requestId) {
         new AlertDialog.Builder(this)
             .setTitle("Gửi thành công! ✅")
             .setMessage("Cảm ơn bạn đã báo cáo!\n\n" +
                     "Yêu cầu cứu hộ của bạn đã được ghi nhận. " +
                     "Đội ngũ của chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.\n\n" +
-                    "Mã yêu cầu: #" + generateRequestId() + "\n\n" +
+                    "Mã yêu cầu: #" + requestId + "\n\n" +
                     "Nếu trường hợp khẩn cấp, vui lòng gọi: 0905-XXX-XXX")
             .setPositiveButton("Hoàn tất", (dialog, which) -> {
                 // Return to previous screen

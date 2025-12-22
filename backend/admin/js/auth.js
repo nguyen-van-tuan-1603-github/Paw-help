@@ -1,5 +1,29 @@
 // Authentication utilities
 
+// Get auth token
+function getAuthToken() {
+    return localStorage.getItem('admin_token');
+}
+
+// Check if user is logged in
+function isLoggedIn() {
+    return !!getAuthToken();
+}
+
+// Get current admin user
+function getCurrentUser() {
+    const userStr = localStorage.getItem('admin_user');
+    return userStr ? JSON.parse(userStr) : null;
+}
+
+// Logout
+function logout() {
+    localStorage.removeItem('admin_token');
+    localStorage.removeItem('admin_user');
+    localStorage.removeItem('admin_remember');
+    window.location.href = 'index.html';
+}
+
 // Check if admin role
 function isAdmin() {
     const user = getCurrentUser();
@@ -14,7 +38,7 @@ function requireAdmin() {
     }
     
     if (!isAdmin()) {
-        showToast('Bạn không có quyền truy cập trang này', 'error');
+        alert('Bạn không có quyền truy cập trang này');
         logout();
         return false;
     }
@@ -29,17 +53,21 @@ let sessionTimer;
 function resetSessionTimer() {
     clearTimeout(sessionTimer);
     sessionTimer = setTimeout(() => {
-        showToast('Phiên đăng nhập đã hết hạn', 'error');
+        alert('Phiên đăng nhập đã hết hạn');
         logout();
     }, SESSION_TIMEOUT);
 }
 
-// Reset timer on user activity
-if (isLoggedIn()) {
-    resetSessionTimer();
-    
-    ['mousedown', 'keydown', 'scroll', 'touchstart'].forEach(event => {
-        document.addEventListener(event, resetSessionTimer, true);
+// Reset timer on user activity (chỉ chạy khi DOM đã load)
+if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+        if (isLoggedIn()) {
+            resetSessionTimer();
+            
+            ['mousedown', 'keydown', 'scroll', 'touchstart'].forEach(event => {
+                document.addEventListener(event, resetSessionTimer, true);
+            });
+        }
     });
 }
 

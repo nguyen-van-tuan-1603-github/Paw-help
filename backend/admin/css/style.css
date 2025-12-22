@@ -109,6 +109,9 @@ body {
     border-radius: 8px;
     font-size: 15px;
     transition: all 0.3s;
+    background-color: white;
+    position: relative;
+    z-index: 1;
 }
 
 .login-form input:focus {
@@ -224,6 +227,7 @@ body {
     left: 0;
     overflow: hidden;
     z-index: 1;
+    pointer-events: none; /* Cho phép click qua background animation */
 }
 
 .paw-print {
