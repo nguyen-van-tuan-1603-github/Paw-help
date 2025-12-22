@@ -294,6 +294,8 @@
                 </LinearLayout>
 
                 <!-- Edit Profile Button -->
+
+                <!-- Logout Button -->
                 <Button
                     android:id="@+id/btnEditProfile"
                     android:layout_width="match_parent"
@@ -311,7 +313,6 @@
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
-                <!-- Logout Button -->
                 <Button
                     android:id="@+id/btnLogout"
                     android:layout_width="match_parent"

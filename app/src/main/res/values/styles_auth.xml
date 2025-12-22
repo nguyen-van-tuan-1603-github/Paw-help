@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Auth EditText Style -->
     <style name="AuthEditTextStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">52dp</item>
@@ -8,33 +7,30 @@
         <item name="android:paddingStart">16dp</item>
         <item name="android:paddingEnd">16dp</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/text_primary_dark</item>
+        <item name="android:fontFamily">@font/playfair_display</item> <item name="android:textColor">@color/text_primary_dark</item>
         <item name="android:textColorHint">@color/text_secondary</item>
     </style>
 
-    <!-- Auth Label Style -->
     <style name="AuthLabelStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:fontFamily">@font/playfair_display</item> <item name="android:layout_marginBottom">8dp</item>
         <item name="android:textColor">@color/text_primary</item>
     </style>
 
-    <!-- Auth Button Style -->
     <style name="AuthButtonStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">56dp</item>
         <item name="android:background">@drawable/button_ripple</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:fontFamily">@font/playfair_display</item> <item name="android:textColor">#FFFFFF</item>
         <item name="android:textStyle">bold</item>
         <item name="android:elevation">4dp</item>
         <item name="android:stateListAnimator">@null</item>
     </style>
 
-    <!-- Auth Card Style -->
     <style name="AuthCardStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -45,7 +41,6 @@
         <item name="android:elevation">8dp</item>
     </style>
 
-    <!-- Auth Title Style -->
     <style name="AuthTitleStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -53,16 +48,15 @@
         <item name="android:layout_marginBottom">24dp</item>
         <item name="android:textSize">28sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:fontFamily">@font/playfair_display</item> <item name="android:textColor">@color/text_primary</item>
     </style>
 
-    <!-- Auth Link Style -->
     <style name="AuthLinkStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">8dp</item>
         <item name="android:textSize">15sp</item>
-        <item name="android:textColor">@color/text_link</item>
+        <item name="android:fontFamily">@font/playfair_display</item> <item name="android:textColor">@color/text_link</item>
         <item name="android:textStyle">bold</item>
     </style>
 </resources>
