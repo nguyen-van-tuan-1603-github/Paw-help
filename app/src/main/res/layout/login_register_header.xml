@@ -5,42 +5,40 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    android:layout_marginBottom="16dp">
+    android:paddingTop="20dp">
 
-    <!-- Logo PawHelp -->
     <androidx.cardview.widget.CardView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        app:cardCornerRadius="40dp"
-        app:cardElevation="4dp"
-        android:backgroundTint="#FFFFFF"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:cardCornerRadius="50dp"
+        app:cardElevation="6dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="8dp">
+        app:cardBackgroundColor="#5EAAA8">
 
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_paw_logo_large"
-            android:contentDescription="PawHelp Logo" />
-
+            android:layout_width="match_parent"
+            android:layout_height="112dp"
+            android:contentDescription="PawHelp Logo"
+            android:scaleType="centerInside"
+            android:src="@drawable/Logo" />
     </androidx.cardview.widget.CardView>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="PawHelp"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="@color/text_primary" />
+        android:textColor="#5EAAA8"
+        android:layout_marginTop="12dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Cứu hộ động vật với tình yêu thương"
         android:textSize="14sp"
-        android:textColor="@color/text_secondary"
-        android:layout_marginBottom="8dp" />
-
+        android:textColor="#757575"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="16dp" />
 
 </LinearLayout>
