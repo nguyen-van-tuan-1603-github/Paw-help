@@ -7,55 +7,39 @@
     android:background="@drawable/background_login_gradient"
     tools:context=".LoginActivity">
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="24dp"
-        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
             <include layout="@layout/login_register_header" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="24dp"
-                android:text="@string/btn_login"
-                android:textSize="32sp"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:shadowColor="#80000000"
-                android:shadowDx="3"
-                android:shadowDy="3"
-                android:shadowRadius="6"
-                android:letterSpacing="0.05" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
                 android:text="@string/email_label"
-                android:textColor="@color/text_label_light"
+                android:textColor="#5EAAA8"
                 android:textStyle="bold"
-                android:textSize="16sp"
-                android:shadowColor="#CC000000"
-                android:shadowDx="2"
-                android:shadowDy="2"
-                android:shadowRadius="4"
-                android:letterSpacing="0.02" />
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/edtEmail"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
                 android:background="@drawable/input_field_background"
                 android:drawableStart="@drawable/ic_email"
                 android:drawablePadding="12dp"
@@ -67,22 +51,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:text="@string/password_label"
-                android:textColor="@color/text_label_light"
+                android:textColor="#5EAAA8"
                 android:textStyle="bold"
-                android:textSize="16sp"
-                android:shadowColor="#CC000000"
-                android:shadowDx="2"
-                android:shadowDy="2"
-                android:shadowRadius="4"
-                android:letterSpacing="0.02" />
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/edtPassword"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="12dp"
                 android:background="@drawable/input_field_background"
                 android:drawableStart="@drawable/ic_lock"
                 android:drawablePadding="12dp"
@@ -96,28 +75,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginBottom="24dp"
-                android:padding="8dp"
+                android:layout_marginTop="8dp"
                 android:text="@string/forgot_password"
-                android:textColor="@color/text_label_light"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:shadowColor="#CC000000"
-                android:shadowDx="2"
-                android:shadowDy="2"
-                android:shadowRadius="4" />
+                android:textColor="#5EAAA8"
+                android:textSize="14sp" />
 
             <Button
                 android:id="@+id/btnLogin"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/button_height_large"
+                android:layout_height="55dp"
+                android:layout_marginTop="24dp"
                 android:background="@drawable/button_gradient_background"
                 android:text="@string/btn_login"
+                android:textAllCaps="false"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:elevation="8dp"
-                app:cornerRadius="@dimen/radius_medium" />
+                app:cornerRadius="15dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -130,7 +104,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/no_account"
-                    android:textColor="#E0FFFFFF"
+                    android:textColor="#757575"
                     android:textSize="14sp" />
 
                 <TextView
@@ -139,10 +113,11 @@
                     android:layout_height="wrap_content"
                     android:padding="4dp"
                     android:text="@string/btn_register"
-                    android:textColor="#FFFFFF"
+                    android:textColor="#5EAAA8"
                     android:textStyle="bold"
                     android:textSize="14sp" />
             </LinearLayout>
 
-    </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
