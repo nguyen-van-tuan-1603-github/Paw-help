@@ -18,9 +18,31 @@ public class RetrofitClient {
     // ⚠️ QUAN TRỌNG: Đổi BASE_URL phù hợp với môi trường
     // Emulator: http://10.0.2.2:5125/api/
     // Thiết bị thật: http://192.168.X.X:5125/api/ (IP máy tính)
-    // IP máy tính hiện tại: 192.168.1.11 (từ ipconfig)
-    private static final String BASE_URL = "http://192.168.1.11:5125/api/";
-    // Nếu dùng emulator, đổi thành: http://10.0.2.2:5125/api/
+    // 
+    // IP máy tính hiện tại: 192.168.1.16 (chạy lệnh ipconfig để kiểm tra)
+    // 
+    // CÁCH ĐỔI:
+    // 1. Để chạy trên EMULATOR: dùng "http://10.0.2.2:5125/api/"
+    // 2. Để chạy trên THIẾT BỊ THẬT: 
+    //    - Chạy lệnh: ipconfig (Windows) hoặc ifconfig (Mac/Linux)
+    //    - Tìm IPv4 Address (ví dụ: 192.168.1.16)
+    //    - Đổi thành: "http://192.168.1.16:5125/api/"
+    //    - Đảm bảo thiết bị và máy tính cùng mạng WiFi
+    //    - Đảm bảo backend server đang chạy (node server.js)
+    //    - Kiểm tra firewall không chặn port 5125
+    
+    // 🔄 CHỌN MÔI TRƯỜNG (đổi dòng này):
+    private static final boolean USE_EMULATOR = false; // true = Emulator, false = Thiết bị thật
+    
+    // IP máy tính (cập nhật theo IP thực tế của máy bạn)
+    private static final String PC_IP = "192.168.1.16";
+    
+    // Base URLs
+    private static final String EMULATOR_URL = "http://10.0.2.2:5125/api/";
+    private static final String DEVICE_URL = "http://" + PC_IP + ":5125/api/";
+    
+    // Chọn URL dựa trên môi trường
+    private static final String BASE_URL = USE_EMULATOR ? EMULATOR_URL : DEVICE_URL;
 
     private static RetrofitClient instance;
     private PawHelpApi api;
@@ -78,6 +100,26 @@ public class RetrofitClient {
         return api;
     }
     
+    public String getBaseUrl() {
+        return BASE_URL;
+    }
+    
+    // Lấy base URL cho images (không có /api/)
+    public String getImageBaseUrl() {
+        // Remove /api/ from end if present
+        String url = BASE_URL;
+        if (url.endsWith("/api/")) {
+            url = url.substring(0, url.length() - 5);
+        } else if (url.endsWith("/api")) {
+            url = url.substring(0, url.length() - 4);
+        }
+        // Remove trailing slash
+        if (url.endsWith("/")) {
+            url = url.substring(0, url.length() - 1);
+        }
+        return url;
+    }
+    
     // ==================== TOKEN MANAGEMENT ====================
     
     public void saveToken(String token) {
@@ -126,6 +168,11 @@ public class RetrofitClient {
     public String getUserEmail() {
         SharedPreferences prefs = context.getSharedPreferences("PawHelp", Context.MODE_PRIVATE);
         return prefs.getString("user_email", "");
+    }
+    
+    public String getUserRole() {
+        SharedPreferences prefs = context.getSharedPreferences("PawHelp", Context.MODE_PRIVATE);
+        return prefs.getString("user_role", "user");
     }
     
     public void clearUser() {

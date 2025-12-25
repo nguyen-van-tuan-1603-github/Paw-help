@@ -81,21 +81,33 @@ public class RescueDashboardActivity extends AppCompatActivity implements Rescue
 
                     if (postListResponse != null && postListResponse.getItems() != null) {
                         for (PostItem item : postListResponse.getItems()) {
-                            String emoji = item.getAnimalType() != null ? item.getAnimalType().getTypeEmoji() : "🐾";
+                            // animalType giờ là String, không phải object
+                            String animalType = item.getAnimalType() != null ? item.getAnimalType() : "Chưa xác định";
+                            String emoji = getEmojiForAnimalType(animalType);
                             String statusVN = convertStatus(item.getStatus());
-                            String userName = item.getUser() != null ? item.getUser().getFullName() : "Người dùng";
-                            String userId = item.getUser() != null ? String.valueOf(item.getUser().getUserId()) : "0";
+                            
+                            // Lấy user info trực tiếp từ PostItem
+                            String userName = item.getUserName() != null ? item.getUserName() : "Người dùng";
+                            String userId = item.getUserId() != null ? String.valueOf(item.getUserId()) : "0";
+                            String userAvatar = item.getUserAvatar(); // Avatar URL từ API
+                            
+                            String description = item.getDescription();
+                            if (description == null || description.isEmpty()) {
+                                description = "Phát hiện động vật cần cứu hộ";
+                            }
 
                             RescuePost post = new RescuePost(
                                     String.valueOf(item.getPostId()),
-                                    item.getDescription() != null ? item.getDescription() : item.getTitle(),
-                                    item.getLocation(),
+                                    description,
+                                    item.getLocation() != null ? item.getLocation() : "Chưa có địa chỉ",
                                     emoji,
                                     statusVN,
                                     formatTime(item.getCreatedAt()),
-                                    R.drawable.cho, // Default image, sẽ load từ URL sau
+                                    R.drawable.cho, // Default image resource
+                                    item.getImageUrl(), // Image URL từ server
                                     userId,
-                                    userName
+                                    userName,
+                                    userAvatar // User avatar URL
                             );
                             rescuePosts.add(post);
                         }
@@ -130,8 +142,46 @@ public class RescueDashboardActivity extends AppCompatActivity implements Rescue
     }
 
     private String formatTime(String createdAt) {
-        // Tạm thời trả về string đơn giản, sau này có thể format đẹp hơn
-        return "Vừa xong";
+        if (createdAt == null || createdAt.isEmpty()) {
+            return "Vừa xong";
+        }
+        
+        try {
+            java.text.SimpleDateFormat inputFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", java.util.Locale.getDefault());
+            java.util.Date date = inputFormat.parse(createdAt);
+            
+            long diff = System.currentTimeMillis() - date.getTime();
+            long seconds = diff / 1000;
+            long minutes = seconds / 60;
+            long hours = minutes / 60;
+            long days = hours / 24;
+            
+            if (seconds < 60) {
+                return "Vừa xong";
+            } else if (minutes < 60) {
+                return minutes + " phút trước";
+            } else if (hours < 24) {
+                return hours + " giờ trước";
+            } else if (days < 7) {
+                return days + " ngày trước";
+            } else {
+                java.text.SimpleDateFormat outputFormat = new java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
+                return outputFormat.format(date);
+            }
+        } catch (Exception e) {
+            return "Vừa xong";
+        }
+    }
+    
+    private String getEmojiForAnimalType(String animalType) {
+        if (animalType == null) return "🐾";
+        
+        String type = animalType.toLowerCase();
+        if (type.contains("chó") || type.contains("dog")) return "🐕";
+        if (type.contains("mèo") || type.contains("cat")) return "🐈";
+        if (type.contains("chim") || type.contains("bird")) return "🐦";
+        if (type.contains("thỏ") || type.contains("rabbit")) return "🐰";
+        return "🐾";
     }
 
     private void updateStatistics() {

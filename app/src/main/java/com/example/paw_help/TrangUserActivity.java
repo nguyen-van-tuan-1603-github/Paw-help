@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,76 +30,61 @@ public class TrangUserActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        // TODO: Update layout to include these views or use existing IDs
-        // btnBack = findViewById(R.id.btnBack);
-        // imgUserAvatar = findViewById(R.id.imgUserAvatar);
-        // tvUserName = findViewById(R.id.tvUserName);
-        // tvUserEmail = findViewById(R.id.tvUserEmail);
-        // tvUserPhone = findViewById(R.id.tvUserPhone);
-
-        // cardProfile = findViewById(R.id.cardProfile);
-        // cardHistory = findViewById(R.id.cardHistory);
-        // cardSettings = findViewById(R.id.cardSettings);
-        // cardAbout = findViewById(R.id.cardAbout);
-        // cardTeam = findViewById(R.id.cardTeam);
-        // cardLogout = findViewById(R.id.cardLogout);
-
-        // btnEditProfile = findViewById(R.id.btnEditProfile);
+        // Sử dụng các view có sẵn trong layout
+        btnBack = findViewById(R.id.cardUserIcon);
+        imgUserAvatar = findViewById(R.id.cardUserIcon);
+        
+        // Tìm các button trong layout
+        LinearLayout buttonLayout = findViewById(R.id.buttonLayout);
+        if (buttonLayout != null) {
+            // Button "Về chúng tôi" và "Đội ngũ" đã có trong layout
+        }
     }
 
     private void setupListeners() {
-        // TODO: Uncomment when views are added to layout
-        /*
-        btnBack.setOnClickListener(v -> finish());
-
-        btnEditProfile.setOnClickListener(v -> {
-            // TODO: Implement edit profile
-            android.widget.Toast.makeText(this, "Tính năng đang phát triển",
-                android.widget.Toast.LENGTH_SHORT).show();
-        });
-
-        cardProfile.setOnClickListener(v -> {
-            // TODO: Go to profile detail
-            android.widget.Toast.makeText(this, "Xem hồ sơ",
-                android.widget.Toast.LENGTH_SHORT).show();
-        });
-
-        cardHistory.setOnClickListener(v -> {
-            Intent intent = new Intent(TrangUserActivity.this,
-                TrangXemLichSuCuuHoActivity.class);
-            startActivity(intent);
-        });
-
-        cardSettings.setOnClickListener(v -> {
-            // TODO: Go to settings
-            android.widget.Toast.makeText(this, "Cài đặt",
-                android.widget.Toast.LENGTH_SHORT).show();
-        });
-
-        cardAbout.setOnClickListener(v -> {
-            Intent intent = new Intent(TrangUserActivity.this, TrangVeChungToiActivity.class);
-            startActivity(intent);
-        });
-
-        cardTeam.setOnClickListener(v -> {
-            Intent intent = new Intent(TrangUserActivity.this, TrangDoiNguActivity.class);
-            startActivity(intent);
-        });
-
-        cardLogout.setOnClickListener(v -> {
-            performLogout();
-        });
-        */
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
+        
+        // Setup buttons trong layout
+        LinearLayout buttonLayout = findViewById(R.id.buttonLayout);
+        if (buttonLayout != null) {
+            // Button "Về chúng tôi" (index 0)
+            if (buttonLayout.getChildCount() > 0) {
+                buttonLayout.getChildAt(0).setOnClickListener(v -> {
+                    Intent intent = new Intent(TrangUserActivity.this, TrangVeChungToiActivity.class);
+                    startActivity(intent);
+                });
+            }
+            
+            // Button "Đội ngũ" (index 1)
+            if (buttonLayout.getChildCount() > 1) {
+                buttonLayout.getChildAt(1).setOnClickListener(v -> {
+                    Intent intent = new Intent(TrangUserActivity.this, TrangDoiNguActivity.class);
+                    startActivity(intent);
+                });
+            }
+        }
+        
+        // FloatingActionButton để đăng bài
+        com.google.android.material.floatingactionbutton.FloatingActionButton fab = 
+            findViewById(android.R.id.button1);
+        if (fab != null) {
+            fab.setOnClickListener(v -> {
+                Intent intent = new Intent(TrangUserActivity.this, TrangDangBaiActivity.class);
+                startActivity(intent);
+            });
+        }
     }
 
     private void loadUserData() {
-        // TODO: Load user data from SharedPreferences or Firebase
-        // TODO: Uncomment when views are added
-        /*
-        tvUserName.setText("Người dùng");
-        tvUserEmail.setText("user@example.com");
-        tvUserPhone.setText("0123456789");
-        */
+        // Load user data từ RetrofitClient
+        RetrofitClient client = RetrofitClient.getInstance(this);
+        String userName = client.getUserName();
+        String userEmail = client.getUserEmail();
+        
+        // Có thể hiển thị thông tin user ở đây nếu có view
+        // Hiện tại layout không có các TextView này nên bỏ qua
     }
 
     private void performLogout() {
