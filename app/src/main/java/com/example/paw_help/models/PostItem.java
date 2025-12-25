@@ -1,26 +1,46 @@
 package com.example.paw_help.models;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class PostItem {
+    @SerializedName("postId")
     private int postId;
-    private String title;
+    
     private String description;
+    
+    @SerializedName("animalType")
+    private String animalType; // API trả về string, không phải object
+    
     private String location;
-    private double latitude;
-    private double longitude;
+    
+    private Double latitude;
+    
+    private Double longitude;
+    
+    @SerializedName("imageUrl")
     private String imageUrl;
+    
     private String status;
-    private String urgencyLevel;
-    private String contactPhone;
-    private int viewCount;
+    
+    @SerializedName("createdAt")
     private String createdAt;
+    
+    @SerializedName("updatedAt")
     private String updatedAt;
-    private AnimalTypeDto animalType;
-    private PostUserDto user;
-    private int commentCount;
-    private int volunteerCount;
-    private List<String> images;
+    
+    // User info (API trả về trực tiếp trong object, không phải nested object)
+    @SerializedName("userId")
+    private Integer userId;
+    
+    @SerializedName("userName")
+    private String userName;
+    
+    @SerializedName("userAvatar")
+    private String userAvatar;
+    
+    @SerializedName("userPhone")
+    private String userPhone;
 
     // Getters and Setters
     public int getPostId() {
@@ -31,20 +51,20 @@ public class PostItem {
         this.postId = postId;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getAnimalType() {
+        return animalType;
+    }
+
+    public void setAnimalType(String animalType) {
+        this.animalType = animalType;
     }
 
     public String getLocation() {
@@ -55,19 +75,19 @@ public class PostItem {
         this.location = location;
     }
 
-    public double getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    public double getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
@@ -87,30 +107,6 @@ public class PostItem {
         this.status = status;
     }
 
-    public String getUrgencyLevel() {
-        return urgencyLevel;
-    }
-
-    public void setUrgencyLevel(String urgencyLevel) {
-        this.urgencyLevel = urgencyLevel;
-    }
-
-    public String getContactPhone() {
-        return contactPhone;
-    }
-
-    public void setContactPhone(String contactPhone) {
-        this.contactPhone = contactPhone;
-    }
-
-    public int getViewCount() {
-        return viewCount;
-    }
-
-    public void setViewCount(int viewCount) {
-        this.viewCount = viewCount;
-    }
-
     public String getCreatedAt() {
         return createdAt;
     }
@@ -127,44 +123,52 @@ public class PostItem {
         this.updatedAt = updatedAt;
     }
 
-    public AnimalTypeDto getAnimalType() {
-        return animalType;
+    // User info getters/setters
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setAnimalType(AnimalTypeDto animalType) {
-        this.animalType = animalType;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserAvatar() {
+        return userAvatar;
+    }
+
+    public void setUserAvatar(String userAvatar) {
+        this.userAvatar = userAvatar;
+    }
+
+    public String getUserPhone() {
+        return userPhone;
+    }
+
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
+    }
+
+    // Helper method để tương thích với code cũ đang dùng getUser()
     public PostUserDto getUser() {
-        return user;
+        PostUserDto userDto = new PostUserDto();
+        userDto.setUserId(userId != null ? userId : 0);
+        userDto.setFullName(userName);
+        userDto.setAvatarUrl(userAvatar);
+        userDto.setPhone(userPhone);
+        return userDto;
     }
 
-    public void setUser(PostUserDto user) {
-        this.user = user;
-    }
-
-    public int getCommentCount() {
-        return commentCount;
-    }
-
-    public void setCommentCount(int commentCount) {
-        this.commentCount = commentCount;
-    }
-
-    public int getVolunteerCount() {
-        return volunteerCount;
-    }
-
-    public void setVolunteerCount(int volunteerCount) {
-        this.volunteerCount = volunteerCount;
-    }
-
-    public List<String> getImages() {
-        return images;
-    }
-
-    public void setImages(List<String> images) {
-        this.images = images;
+    // Helper method để tương thích với code cũ đang dùng getContactPhone()
+    public String getContactPhone() {
+        return userPhone;
     }
 }
 

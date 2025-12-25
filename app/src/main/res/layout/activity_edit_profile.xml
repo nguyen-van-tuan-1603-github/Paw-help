@@ -262,6 +262,32 @@
                     android:lineSpacingExtra="2dp"
                     android:layout_marginBottom="24dp" />
 
+                <!-- Loading ProgressBar -->
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginVertical="16dp"
+                    android:visibility="gone"
+                    android:indeterminateTint="#4DB6AC" />
+
+                <!-- Error Message -->
+                <TextView
+                    android:id="@+id/tvErrorMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="#F44336"
+                    android:textSize="13sp"
+                    android:padding="12dp"
+                    android:background="#FFEBEE"
+                    android:visibility="gone"
+                    android:layout_marginBottom="12dp"
+                    android:drawableStart="@android:drawable/stat_notify_error"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical" />
+
                 <!-- Save Button -->
                 <Button
                     android:id="@+id/btnSaveChanges"
