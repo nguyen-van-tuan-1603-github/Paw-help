@@ -22,9 +22,9 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText edtEmail, edtPassword;
-    private Button btnLogin;
-    private TextView tvRegister, tvForgotPassword;
+    private com.google.android.material.textfield.TextInputEditText edtEmail, edtPassword;
+    private com.google.android.material.button.MaterialButton btnLogin;
+    private TextView tvRegister, tvForgotPassword, tvErrorMessage;
     private ProgressBar progressBar;
     private RetrofitClient retrofitClient;
 
@@ -43,6 +43,8 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         tvRegister = findViewById(R.id.tvRegister);
         tvForgotPassword = findViewById(R.id.tvForgotPassword);
+        tvErrorMessage = findViewById(R.id.tvErrorMessage);
+        progressBar = findViewById(R.id.progressBar);
         
         // Khởi tạo RetrofitClient
         retrofitClient = RetrofitClient.getInstance(this);
@@ -68,35 +70,39 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void performLogin() {
-        String email = edtEmail.getText().toString().trim();
-        String password = edtPassword.getText().toString().trim();
+        String email = edtEmail.getText() != null ? edtEmail.getText().toString().trim() : "";
+        String password = edtPassword.getText() != null ? edtPassword.getText().toString().trim() : "";
+
+        // Hide previous errors
+        hideError();
 
         // Validation
         if (TextUtils.isEmpty(email)) {
-            edtEmail.setError("Vui lòng nhập email");
+            showError("Vui lòng nhập email");
             edtEmail.requestFocus();
             return;
         }
 
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            edtEmail.setError("Email không hợp lệ");
+            showError("Email không hợp lệ");
             edtEmail.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(password)) {
-            edtPassword.setError("Vui lòng nhập mật khẩu");
+            showError("Vui lòng nhập mật khẩu");
             edtPassword.requestFocus();
             return;
         }
 
         if (password.length() < 6) {
-            edtPassword.setError("Mật khẩu phải có ít nhất 6 ký tự");
+            showError("Mật khẩu phải có ít nhất 6 ký tự");
             edtPassword.requestFocus();
             return;
         }
 
-        // Disable button và show loading
+        // Show loading và disable button
+        showLoading();
         btnLogin.setEnabled(false);
         btnLogin.setText("Đang đăng nhập...");
         
@@ -107,6 +113,7 @@ public class LoginActivity extends AppCompatActivity {
         call.enqueue(new Callback<ApiResponse<AuthResponse>>() {
             @Override
             public void onResponse(Call<ApiResponse<AuthResponse>> call, Response<ApiResponse<AuthResponse>> response) {
+                hideLoading();
                 btnLogin.setEnabled(true);
                 btnLogin.setText("Đăng Nhập");
                 
@@ -125,20 +132,59 @@ public class LoginActivity extends AppCompatActivity {
                         // Chuyển sang MainActivity
                         goToMainActivity();
                     } else {
-                        Toast.makeText(LoginActivity.this, apiResponse.getMessage(), Toast.LENGTH_LONG).show();
+                        String errorMsg = apiResponse.getMessage() != null ? apiResponse.getMessage() : "Đăng nhập thất bại";
+                        showError(errorMsg);
                     }
                 } else {
-                    Toast.makeText(LoginActivity.this, "Đăng nhập thất bại. Vui lòng thử lại!", Toast.LENGTH_LONG).show();
+                    String errorMsg = "Đăng nhập thất bại";
+                    if (response.code() == 401) {
+                        errorMsg = "Email hoặc mật khẩu không đúng";
+                    } else if (response.code() == 400) {
+                        errorMsg = "Thông tin không hợp lệ";
+                    }
+                    showError(errorMsg);
                 }
             }
             
             @Override
             public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
+                hideLoading();
                 btnLogin.setEnabled(true);
                 btnLogin.setText("Đăng Nhập");
-                Toast.makeText(LoginActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                
+                String errorMsg = "Không thể kết nối đến server";
+                if (t instanceof java.net.UnknownHostException) {
+                    errorMsg = "Không có kết nối mạng. Vui lòng kiểm tra WiFi hoặc dữ liệu di động.";
+                } else if (t instanceof java.net.SocketTimeoutException) {
+                    errorMsg = "Kết nối quá thời gian. Vui lòng thử lại.";
+                }
+                showError(errorMsg);
             }
         });
+    }
+
+    private void showLoading() {
+        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
+        if (btnLogin != null) btnLogin.setEnabled(false);
+    }
+
+    private void hideLoading() {
+        if (progressBar != null) progressBar.setVisibility(View.GONE);
+    }
+
+    private void showError(String message) {
+        if (tvErrorMessage != null) {
+            tvErrorMessage.setText(message);
+            tvErrorMessage.setVisibility(View.VISIBLE);
+        } else {
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void hideError() {
+        if (tvErrorMessage != null) {
+            tvErrorMessage.setVisibility(View.GONE);
+        }
     }
     
     private void goToMainActivity() {

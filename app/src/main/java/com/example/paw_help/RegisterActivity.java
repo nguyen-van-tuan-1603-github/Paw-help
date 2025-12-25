@@ -3,9 +3,8 @@ package com.example.paw_help;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,10 +20,11 @@ import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText edtFullName, edtEmail, edtPhone, edtPassword, edtConfirmPassword;
-    private CheckBox cbAgreeTerms;
-    private Button btnRegister;
-    private TextView tvLogin;
+    private com.google.android.material.textfield.TextInputEditText edtFullName, edtEmail, edtPhone, edtPassword;
+    private com.google.android.material.checkbox.MaterialCheckBox cbAgreeTerms;
+    private com.google.android.material.button.MaterialButton btnRegister;
+    private TextView tvLogin, tvErrorMessage;
+    private ProgressBar progressBar;
     private RetrofitClient retrofitClient;
 
     @Override
@@ -41,10 +41,11 @@ public class RegisterActivity extends AppCompatActivity {
         edtEmail = findViewById(R.id.edtEmail);
         edtPhone = findViewById(R.id.edtPhone);
         edtPassword = findViewById(R.id.edtPassword);
-        edtConfirmPassword = findViewById(R.id.edtConfirmPassword);
         cbAgreeTerms = findViewById(R.id.cbAgreeTerms);
         btnRegister = findViewById(R.id.btnRegister);
         tvLogin = findViewById(R.id.tvLogin);
+        tvErrorMessage = findViewById(R.id.tvErrorMessage);
+        progressBar = findViewById(R.id.progressBar);
         
         // Khởi tạo RetrofitClient
         retrofitClient = RetrofitClient.getInstance(this);
@@ -59,74 +60,65 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void performRegister() {
-        String fullName = edtFullName.getText().toString().trim();
-        String email = edtEmail.getText().toString().trim();
-        String phone = edtPhone.getText().toString().trim();
-        String password = edtPassword.getText().toString().trim();
-        String confirmPassword = edtConfirmPassword.getText().toString().trim();
+        String fullName = edtFullName.getText() != null ? edtFullName.getText().toString().trim() : "";
+        String email = edtEmail.getText() != null ? edtEmail.getText().toString().trim() : "";
+        String phone = edtPhone.getText() != null ? edtPhone.getText().toString().trim() : "";
+        String password = edtPassword.getText() != null ? edtPassword.getText().toString().trim() : "";
+        String confirmPassword = password; // Không có field confirm password trong layout
+
+        // Hide previous errors
+        hideError();
 
         // Validation
         if (TextUtils.isEmpty(fullName)) {
-            edtFullName.setError("Vui lòng nhập họ tên");
+            showError("Vui lòng nhập họ tên");
             edtFullName.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(email)) {
-            edtEmail.setError("Vui lòng nhập email");
+            showError("Vui lòng nhập email");
             edtEmail.requestFocus();
             return;
         }
 
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            edtEmail.setError("Email không hợp lệ");
+            showError("Email không hợp lệ");
             edtEmail.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(phone)) {
-            edtPhone.setError("Vui lòng nhập số điện thoại");
+            showError("Vui lòng nhập số điện thoại");
             edtPhone.requestFocus();
             return;
         }
 
         if (phone.length() < 10) {
-            edtPhone.setError("Số điện thoại không hợp lệ");
+            showError("Số điện thoại không hợp lệ (tối thiểu 10 số)");
             edtPhone.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(password)) {
-            edtPassword.setError("Vui lòng nhập mật khẩu");
+            showError("Vui lòng nhập mật khẩu");
             edtPassword.requestFocus();
             return;
         }
 
         if (password.length() < 6) {
-            edtPassword.setError("Mật khẩu phải có ít nhất 6 ký tự");
+            showError("Mật khẩu phải có ít nhất 6 ký tự");
             edtPassword.requestFocus();
             return;
         }
 
-        if (TextUtils.isEmpty(confirmPassword)) {
-            edtConfirmPassword.setError("Vui lòng xác nhận mật khẩu");
-            edtConfirmPassword.requestFocus();
-            return;
-        }
-
-        if (!password.equals(confirmPassword)) {
-            edtConfirmPassword.setError("Mật khẩu không khớp");
-            edtConfirmPassword.requestFocus();
-            return;
-        }
-
         if (!cbAgreeTerms.isChecked()) {
-            Toast.makeText(this, "Vui lòng đồng ý với điều khoản sử dụng",
-                Toast.LENGTH_SHORT).show();
+            showError("Vui lòng đồng ý với điều khoản sử dụng");
             return;
         }
 
-        // Disable button và show loading
+        // Show loading và disable button
+        showLoading();
         btnRegister.setEnabled(false);
         btnRegister.setText("Đang đăng ký...");
         
@@ -137,8 +129,9 @@ public class RegisterActivity extends AppCompatActivity {
         call.enqueue(new Callback<ApiResponse<AuthResponse>>() {
             @Override
             public void onResponse(Call<ApiResponse<AuthResponse>> call, Response<ApiResponse<AuthResponse>> response) {
+                hideLoading();
                 btnRegister.setEnabled(true);
-                btnRegister.setText("Đăng Ký");
+                btnRegister.setText("Tạo Tài Khoản");
                 
                 if (response.isSuccessful() && response.body() != null) {
                     ApiResponse<AuthResponse> apiResponse = response.body();
@@ -154,24 +147,62 @@ public class RegisterActivity extends AppCompatActivity {
                         finish();
                     } else {
                         // Hiển thị lỗi từ server
-                        String errorMsg = apiResponse.getMessage();
+                        String errorMsg = apiResponse.getMessage() != null ? apiResponse.getMessage() : "Đăng ký thất bại";
                         if (apiResponse.getErrors() != null && !apiResponse.getErrors().isEmpty()) {
                             errorMsg += "\n" + String.join("\n", apiResponse.getErrors());
                         }
-                        Toast.makeText(RegisterActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                        showError(errorMsg);
                     }
                 } else {
-                    Toast.makeText(RegisterActivity.this, "Đăng ký thất bại. Vui lòng thử lại!", Toast.LENGTH_LONG).show();
+                    String errorMsg = "Đăng ký thất bại";
+                    if (response.code() == 400) {
+                        errorMsg = "Thông tin không hợp lệ. Vui lòng kiểm tra lại.";
+                    } else if (response.code() == 409) {
+                        errorMsg = "Email đã được sử dụng. Vui lòng chọn email khác.";
+                    }
+                    showError(errorMsg);
                 }
             }
             
             @Override
             public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
+                hideLoading();
                 btnRegister.setEnabled(true);
-                btnRegister.setText("Đăng Ký");
-                Toast.makeText(RegisterActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                btnRegister.setText("Tạo Tài Khoản");
+                
+                String errorMsg = "Không thể kết nối đến server";
+                if (t instanceof java.net.UnknownHostException) {
+                    errorMsg = "Không có kết nối mạng. Vui lòng kiểm tra WiFi hoặc dữ liệu di động.";
+                } else if (t instanceof java.net.SocketTimeoutException) {
+                    errorMsg = "Kết nối quá thời gian. Vui lòng thử lại.";
+                }
+                showError(errorMsg);
             }
         });
+    }
+
+    private void showLoading() {
+        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
+        if (btnRegister != null) btnRegister.setEnabled(false);
+    }
+
+    private void hideLoading() {
+        if (progressBar != null) progressBar.setVisibility(View.GONE);
+    }
+
+    private void showError(String message) {
+        if (tvErrorMessage != null) {
+            tvErrorMessage.setText(message);
+            tvErrorMessage.setVisibility(View.VISIBLE);
+        } else {
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void hideError() {
+        if (tvErrorMessage != null) {
+            tvErrorMessage.setVisibility(View.GONE);
+        }
     }
 }
 
