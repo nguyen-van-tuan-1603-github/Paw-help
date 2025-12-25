@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5125;
+const HOST = process.env.HOST || '0.0.0.0'; // Listen on all network interfaces
 
 // ==================== MIDDLEWARE ====================
 
@@ -78,19 +79,25 @@ app.use((err, req, res, next) => {
 
 // ==================== START SERVER ====================
 
-app.listen(PORT, () => {
+app.listen(PORT, HOST, () => {
     console.log(`
 ╔══════════════════════════════════════════════════════════╗
 ║                                                          ║
 ║          🐾 PAW HELP API SERVER                         ║
 ║                                                          ║
 ║  Status:  ✅ Running                                     ║
+║  Host:    ${HOST}                                        ║
 ║  Port:    ${PORT}                                           ║
 ║  Mode:    ${process.env.NODE_ENV || 'development'}                               ║
-║  URL:     http://localhost:${PORT}                        ║
+║  Local:   http://localhost:${PORT}                        ║
+║  Network: http://${HOST === '0.0.0.0' ? 'YOUR_IP' : HOST}:${PORT}                        ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
     `);
+    if (HOST === '0.0.0.0') {
+        console.log(`\n⚠️  Để kết nối từ thiết bị Android, dùng IP của máy tính trong mạng WiFi.`);
+        console.log(`   Ví dụ: http://192.168.1.16:${PORT}\n`);
+    }
 });
 
 // Graceful shutdown

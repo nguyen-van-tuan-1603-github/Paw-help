@@ -20,7 +20,7 @@
             android:layout_height="112dp"
             android:contentDescription="PawHelp Logo"
             android:scaleType="centerInside"
-            android:src="@drawable/Logo" />
+            android:src="@drawable/ic_paw_logo_large" />
     </androidx.cardview.widget.CardView>
 
     <TextView

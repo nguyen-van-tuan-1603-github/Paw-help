@@ -193,6 +193,79 @@ router.post('/login', [
     }
 });
 
+// ==================== FORGOT PASSWORD ====================
+
+router.post('/forgot-password', [
+    body('email').isEmail().withMessage('Email không hợp lệ')
+], async (req, res) => {
+    try {
+        // Validate input
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                success: false,
+                error: {
+                    code: 'VALIDATION_ERROR',
+                    message: errors.array()[0].msg
+                }
+            });
+        }
+
+        const { email } = req.body;
+
+        // Check if email exists
+        const [users] = await db.query(
+            'SELECT user_id, full_name, email FROM users WHERE email = ?',
+            [email]
+        );
+
+        // Always return success message (security best practice - don't reveal if email exists)
+        // In production, you should send an email with reset link
+        // For now, we'll just log the request and return success
+        
+        if (users.length > 0) {
+            const user = users[0];
+            
+            // Generate reset token (in production, save this to database with expiry)
+            const crypto = require('crypto');
+            const resetToken = crypto.randomBytes(32).toString('hex');
+            const resetTokenExpiry = new Date(Date.now() + 3600000); // 1 hour from now
+            
+            // TODO: Save reset token to database
+            // For now, just log it (in production, save to password_reset_tokens table)
+            console.log(`Password reset requested for user: ${user.email}`);
+            console.log(`Reset token: ${resetToken} (expires: ${resetTokenExpiry})`);
+            console.log(`Reset link: ${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}`);
+            
+            // TODO: Send email with reset link
+            // In production, use nodemailer or email service like SendGrid, AWS SES, etc.
+            // Example:
+            // await sendPasswordResetEmail(user.email, resetToken);
+            
+            res.json({
+                success: true,
+                message: 'Nếu email tồn tại, chúng tôi đã gửi link đặt lại mật khẩu đến email của bạn. Vui lòng kiểm tra hộp thư.'
+            });
+        } else {
+            // Still return success for security (don't reveal if email exists)
+            res.json({
+                success: true,
+                message: 'Nếu email tồn tại, chúng tôi đã gửi link đặt lại mật khẩu đến email của bạn. Vui lòng kiểm tra hộp thư.'
+            });
+        }
+
+    } catch (error) {
+        console.error('Forgot password error:', error);
+        res.status(500).json({
+            success: false,
+            error: {
+                code: 'SERVER_ERROR',
+                message: 'Lỗi server khi xử lý yêu cầu'
+            }
+        });
+    }
+});
+
 // ==================== GET CURRENT USER ====================
 
 router.get('/me', authenticate, async (req, res) => {
