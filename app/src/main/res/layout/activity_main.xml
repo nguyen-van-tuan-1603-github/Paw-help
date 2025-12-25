@@ -8,6 +8,11 @@
     android:background="@color/background"
     tools:context=".MainActivity">
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -23,9 +28,10 @@
                 android:id="@+id/cardHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/primary"
-                app:cardCornerRadius="@dimen/radius_medium"
-                app:cardElevation="@dimen/elevation_medium">
+                android:background="@drawable/gradient_button_primary"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@android:color/transparent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -110,9 +116,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_m"
-                app:cardCornerRadius="@dimen/radius_medium"
-                app:cardBackgroundColor="@color/secondary_bg"
-                app:cardElevation="@dimen/elevation_low">
+                app:cardCornerRadius="24dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="6dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -126,42 +132,52 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:paddingVertical="8dp">
 
-                        <TextView
+                        <androidx.cardview.widget.CardView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="SOS"
-                            android:textColor="@android:color/white"
-                            android:background="#E91E63"
-                            android:textStyle="bold"
-                            android:paddingHorizontal="10dp"
-                            android:paddingVertical="4dp"
-                            android:textSize="12sp" />
+                            app:cardBackgroundColor="#EC407A"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="2dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="SOS"
+                                android:textColor="@android:color/white"
+                                android:textStyle="bold"
+                                android:paddingHorizontal="12dp"
+                                android:paddingVertical="6dp"
+                                android:textSize="11sp" />
+                        </androidx.cardview.widget.CardView>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Cần cứu"
-                            android:textColor="#C2185B"
-                            android:textSize="13sp"
+                            android:textColor="#EC407A"
+                            android:textSize="12sp"
                             android:textStyle="bold"
-                            android:layout_marginTop="4dp" />
+                            android:layout_marginTop="8dp" />
 
                         <TextView
                             android:id="@+id/tvSosCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="5"
-                            android:textSize="28sp"
+                            android:textSize="32sp"
                             android:textStyle="bold"
-                            android:textColor="#C2185B" />
+                            android:textColor="#EC407A"
+                            android:layout_marginTop="4dp" />
                     </LinearLayout>
 
                     <View
                         android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#F8BBD0" />
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:background="#E0E0E0" />
 
                     <!-- Rescued Stats -->
                     <LinearLayout
@@ -169,37 +185,49 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:paddingVertical="8dp">
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_paw_logo"
-                            app:tint="#4CAF50" />
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            app:cardBackgroundColor="#E8F5E9"
+                            app:cardCornerRadius="18dp"
+                            app:cardElevation="0dp">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:padding="8dp"
+                                android:src="@drawable/ic_paw_logo"
+                                app:tint="#4CAF50" />
+                        </androidx.cardview.widget.CardView>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Đã cứu"
-                            android:textColor="#2E7D32"
-                            android:textSize="13sp"
+                            android:textColor="#4CAF50"
+                            android:textSize="12sp"
                             android:textStyle="bold"
-                            android:layout_marginTop="4dp" />
+                            android:layout_marginTop="8dp" />
 
                         <TextView
                             android:id="@+id/tvRescuedCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="23"
-                            android:textSize="28sp"
+                            android:textSize="32sp"
                             android:textStyle="bold"
-                            android:textColor="#2E7D32" />
+                            android:textColor="#4CAF50"
+                            android:layout_marginTop="4dp" />
                     </LinearLayout>
 
                     <View
                         android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#F8BBD0" />
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:background="#E0E0E0" />
 
                     <!-- Total Stats -->
                     <LinearLayout
@@ -207,31 +235,42 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:paddingVertical="8dp">
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/pets"
-                            app:tint="#2196F3" />
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            app:cardBackgroundColor="#E3F2FD"
+                            app:cardCornerRadius="18dp"
+                            app:cardElevation="0dp">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:padding="8dp"
+                                android:src="@drawable/pets"
+                                app:tint="#2196F3" />
+                        </androidx.cardview.widget.CardView>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Tổng số"
-                            android:textColor="#1565C0"
-                            android:textSize="13sp"
+                            android:textColor="#2196F3"
+                            android:textSize="12sp"
                             android:textStyle="bold"
-                            android:layout_marginTop="4dp" />
+                            android:layout_marginTop="8dp" />
 
                         <TextView
                             android:id="@+id/tvTotalCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="28"
-                            android:textSize="28sp"
+                            android:textSize="32sp"
                             android:textStyle="bold"
-                            android:textColor="#1565C0" />
+                            android:textColor="#2196F3"
+                            android:layout_marginTop="4dp" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -246,32 +285,38 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnAboutUs"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="56dp"
                     android:layout_weight="1"
                     android:text="Về chúng tôi"
-                    android:textColor="#3D8B78"
-                    android:textSize="13sp"
+                    android:textColor="#26A69A"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
                     app:icon="@drawable/ic_baseline_language_24"
-                    app:iconTint="#3D8B78"
-                    android:backgroundTint="#D6EBE5"
+                    app:iconTint="#26A69A"
+                    android:backgroundTint="#E0F2F1"
                     app:cornerRadius="16dp"
                     android:layout_marginEnd="8dp"
-                    android:textAllCaps="false" />
+                    android:textAllCaps="false"
+                    app:strokeWidth="0dp"
+                    app:elevation="2dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnTeam"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="56dp"
                     android:layout_weight="1"
                     android:text="Đội ngũ"
-                    android:textColor="#E91E63"
-                    android:textSize="13sp"
+                    android:textColor="#EC407A"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
                     app:icon="@drawable/volunteer"
-                    app:iconTint="#E91E63"
+                    app:iconTint="#EC407A"
                     android:backgroundTint="#FDECF2"
                     app:cornerRadius="16dp"
                     android:layout_marginStart="8dp"
-                    android:textAllCaps="false" />
+                    android:textAllCaps="false"
+                    app:strokeWidth="0dp"
+                    app:elevation="2dp" />
             </LinearLayout>
 
             <!-- Section Title -->
@@ -285,6 +330,115 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="12dp" />
 
+            <!-- Loading ProgressBar -->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginVertical="24dp"
+                android:visibility="gone"
+                android:indeterminateTint="#4DB6AC" />
+
+            <!-- Empty State -->
+            <LinearLayout
+                android:id="@+id/layoutEmptyState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="32dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:src="@drawable/ic_paw_logo"
+                    android:alpha="0.3"
+                    app:tint="#4DB6AC" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chưa có tin cứu hộ nào"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary_dark"
+                    android:layout_marginTop="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hãy là người đầu tiên đăng tin cứu hộ!"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRefresh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tải lại"
+                    android:textColor="@android:color/white"
+                    android:layout_marginTop="16dp"
+                    app:icon="@drawable/ic_baseline_refresh_24"
+                    app:iconTint="@android:color/white"
+                    app:backgroundTint="#4DB6AC"
+                    app:cornerRadius="12dp"
+                    style="@style/Widget.Material3.Button" />
+            </LinearLayout>
+
+            <!-- Error State -->
+            <LinearLayout
+                android:id="@+id/layoutErrorState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="32dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@android:drawable/stat_notify_error"
+                    android:alpha="0.5"
+                    app:tint="#F44336" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Không thể tải dữ liệu"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#F44336"
+                    android:layout_marginTop="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvErrorMessage"
+                    android:text="Vui lòng kiểm tra kết nối mạng"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRetry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Thử lại"
+                    android:textColor="@android:color/white"
+                    android:layout_marginTop="16dp"
+                    app:icon="@drawable/ic_baseline_refresh_24"
+                    app:iconTint="@android:color/white"
+                    app:backgroundTint="#F44336"
+                    app:cornerRadius="12dp"
+                    style="@style/Widget.Material3.Button" />
+            </LinearLayout>
+
             <!-- Rescue Posts RecyclerView -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewRescuePosts"
@@ -297,17 +451,22 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
     <!-- Floating Action Button -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fabAddPost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="24dp"
-        android:src="@drawable/emergency"
-        app:backgroundTint="#E91E63"
-        app:tint="@android:color/white"
-        app:borderWidth="0dp"
+        android:layout_margin="20dp"
+        android:text="Đăng tin cứu hộ"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        app:icon="@drawable/emergency"
+        app:iconTint="@android:color/white"
+        app:backgroundTint="#EC407A"
+        app:elevation="8dp"
         android:contentDescription="Đăng tin cứu hộ" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
