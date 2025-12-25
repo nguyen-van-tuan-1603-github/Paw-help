@@ -8,6 +8,14 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.paw_help.api.PawHelpApi;
+import com.example.paw_help.api.RetrofitClient;
+import com.example.paw_help.models.ApiResponse;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ForgotPasswordActivity extends AppCompatActivity {
 
     private ImageView btnBack;
@@ -51,17 +59,48 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             return;
         }
 
-        // TODO: Implement actual password reset with Firebase/Backend
-        // Send password reset email
+        btnResetPassword.setEnabled(false);
         Toast.makeText(this, "Đang gửi link reset mật khẩu...", Toast.LENGTH_SHORT).show();
 
-        // Simulate sending email
-        new android.os.Handler().postDelayed(() -> {
-            Toast.makeText(this,
-                "Đã gửi link reset mật khẩu đến " + email + "\nVui lòng kiểm tra email!",
-                Toast.LENGTH_LONG).show();
-            finish();
-        }, 1500);
+        RetrofitClient client = RetrofitClient.getInstance(this);
+        PawHelpApi api = client.getApi();
+
+        Call<ApiResponse<Object>> call = api.forgotPassword(email);
+        call.enqueue(new Callback<ApiResponse<Object>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Object>> call,
+                                   Response<ApiResponse<Object>> response) {
+                btnResetPassword.setEnabled(true);
+                
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    // Show message from backend
+                    String message = response.body().getMessage();
+                    if (message == null || message.isEmpty()) {
+                        message = "Nếu email tồn tại, chúng tôi đã gửi link đặt lại mật khẩu đến email của bạn. Vui lòng kiểm tra hộp thư.";
+                    }
+                    Toast.makeText(ForgotPasswordActivity.this, message, Toast.LENGTH_LONG).show();
+                    finish();
+                } else {
+                    String errorMsg = "Gửi email thất bại";
+                    if (response.body() != null) {
+                        if (response.body().getMessage() != null && !response.body().getMessage().isEmpty()) {
+                            errorMsg = response.body().getMessage();
+                        } else if (response.body().getErrors() != null && !response.body().getErrors().isEmpty()) {
+                            errorMsg = response.body().getErrors().get(0);
+                        }
+                    }
+                    Toast.makeText(ForgotPasswordActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
+                btnResetPassword.setEnabled(true);
+                Toast.makeText(ForgotPasswordActivity.this,
+                    "Lỗi: " + t.getMessage(),
+                    Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
 
