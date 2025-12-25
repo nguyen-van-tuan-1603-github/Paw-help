@@ -1,33 +1,42 @@
 package com.example.paw_help.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class PaginationInfo {
-    private int page;
-    private int limit;
-    private int total;
+    @SerializedName("currentPage")
+    private int currentPage;
+    
+    @SerializedName("pageSize")
+    private int pageSize;
+    
+    @SerializedName("totalItems")
+    private int totalItems;
+    
+    @SerializedName("totalPages")
     private int totalPages;
 
-    public int getPage() {
-        return page;
+    public int getCurrentPage() {
+        return currentPage;
     }
 
-    public void setPage(int page) {
-        this.page = page;
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
     }
 
-    public int getLimit() {
-        return limit;
+    public int getPageSize() {
+        return pageSize;
     }
 
-    public void setLimit(int limit) {
-        this.limit = limit;
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 
-    public int getTotal() {
-        return total;
+    public int getTotalItems() {
+        return totalItems;
     }
 
-    public void setTotal(int total) {
-        this.total = total;
+    public void setTotalItems(int totalItems) {
+        this.totalItems = totalItems;
     }
 
     public int getTotalPages() {
@@ -36,6 +45,19 @@ public class PaginationInfo {
 
     public void setTotalPages(int totalPages) {
         this.totalPages = totalPages;
+    }
+
+    // Legacy getters để tương thích với code cũ
+    public int getPage() {
+        return currentPage;
+    }
+
+    public int getLimit() {
+        return pageSize;
+    }
+
+    public int getTotal() {
+        return totalItems;
     }
 }
 

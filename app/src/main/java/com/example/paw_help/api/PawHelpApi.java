@@ -4,6 +4,8 @@ import com.example.paw_help.models.*;
 import com.example.paw_help.TeamMember;
 import retrofit2.Call;
 import retrofit2.http.*;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import java.util.List;
 
 public interface PawHelpApi {
@@ -34,15 +36,35 @@ public interface PawHelpApi {
     @GET("posts/my-posts")
     Call<ApiResponse<PostListResponse>> getMyPosts();
     
-    // Tạo bài đăng (chỉ gửi text, ảnh có thể bổ sung sau)
+    // Tạo bài đăng với upload ảnh
+    @Multipart
+    @POST("posts")
+    Call<ApiResponse<CreatePostResponse>> createPost(
+        @Part("animalType") okhttp3.RequestBody animalType,
+        @Part("description") okhttp3.RequestBody description,
+        @Part("location") okhttp3.RequestBody location,
+        @Part("latitude") okhttp3.RequestBody latitude,
+        @Part("longitude") okhttp3.RequestBody longitude,
+        @Part MultipartBody.Part image
+    );
+    
+    // Tạo bài đăng không có ảnh (fallback)
     @FormUrlEncoded
     @POST("posts")
-    Call<ApiResponse<PostItem>> createPost(
+    Call<ApiResponse<CreatePostResponse>> createPostWithoutImage(
         @Field("animalType") String animalType,
         @Field("description") String description,
         @Field("location") String location,
         @Field("latitude") Double latitude,
         @Field("longitude") Double longitude
+    );
+
+    // Cập nhật trạng thái bài đăng
+    @FormUrlEncoded
+    @PATCH("posts/{id}/status")
+    Call<ApiResponse<Object>> updatePostStatus(
+        @Path("id") int postId,
+        @Field("status") String status
     );
 
     // Guest report (không cần authentication)
@@ -71,6 +93,20 @@ public interface PawHelpApi {
         @Field("phone") String phone
     );
     
+    // Update profile with avatar upload
+    @Multipart
+    @PUT("users/profile")
+    Call<ApiResponse<User>> updateProfileWithAvatar(
+        @Part("fullName") okhttp3.RequestBody fullName,
+        @Part("phone") okhttp3.RequestBody phone,
+        @Part MultipartBody.Part avatar
+    );
+    
+    // Forgot password
+    @FormUrlEncoded
+    @POST("auth/forgot-password")
+    Call<ApiResponse<Object>> forgotPassword(@Field("email") String email);
+    
     // ==================== DASHBOARD ====================
     
     @GET("dashboard/stats")
@@ -94,5 +130,17 @@ public interface PawHelpApi {
 
     @PATCH("notifications/read-all")
     Call<ApiResponse<Object>> markAllNotificationsAsRead();
+
+    @PATCH("notifications/{id}/read")
+    Call<ApiResponse<Object>> markNotificationAsRead(@Path("id") int notificationId);
+
+    // ==================== CHANGE PASSWORD ====================
+
+    @FormUrlEncoded
+    @POST("users/change-password")
+    Call<ApiResponse<Object>> changePassword(
+        @Field("currentPassword") String currentPassword,
+        @Field("newPassword") String newPassword
+    );
 }
 

@@ -7,8 +7,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+
+import com.example.paw_help.api.PawHelpApi;
+import com.example.paw_help.api.RetrofitClient;
+import com.example.paw_help.models.ApiResponse;
+import com.example.paw_help.models.DashboardStats;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TrangVeChungToiActivity extends AppCompatActivity {
 
@@ -71,7 +81,55 @@ public class TrangVeChungToiActivity extends AppCompatActivity {
     }
 
     private void loadStatistics() {
-        // Update statistics - can be loaded from database or API
+        TextView tvRescuedCount = findViewById(R.id.tvRescuedCount);
+        TextView tvAdoptedCount = findViewById(R.id.tvAdoptedCount);
+        TextView tvVolunteersCount = findViewById(R.id.tvVolunteersCount);
+        TextView tvYearsCount = findViewById(R.id.tvYearsCount);
+
+        // Load từ API
+        RetrofitClient client = RetrofitClient.getInstance(this);
+        PawHelpApi api = client.getApi();
+
+        Call<ApiResponse<DashboardStats>> call = api.getDashboardStats();
+        call.enqueue(new Callback<ApiResponse<DashboardStats>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<DashboardStats>> call,
+                                   Response<ApiResponse<DashboardStats>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    DashboardStats stats = response.body().getData();
+                    if (stats != null) {
+                        if (tvRescuedCount != null) {
+                            tvRescuedCount.setText(formatNumber(stats.getRescuedCount()));
+                        }
+                        if (tvAdoptedCount != null) {
+                            // Sử dụng totalPosts hoặc inProgressPosts làm adopted count
+                            tvAdoptedCount.setText(formatNumber(stats.getInProgressPosts()));
+                        }
+                        if (tvVolunteersCount != null) {
+                            // Sử dụng totalUsers làm volunteer count
+                            tvVolunteersCount.setText(formatNumber(stats.getTotalUsers()));
+                        }
+                        if (tvYearsCount != null) {
+                            // Sử dụng totalPosts / 100 làm years (ước tính)
+                            int years = Math.max(1, stats.getTotalPosts() / 100);
+                            tvYearsCount.setText(formatNumber(years));
+                        }
+                    }
+                } else {
+                    // Fallback to default values if API fails
+                    setDefaultStatistics();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<DashboardStats>> call, Throwable t) {
+                // Fallback to default values if API fails
+                setDefaultStatistics();
+            }
+        });
+    }
+    
+    private void setDefaultStatistics() {
         TextView tvRescuedCount = findViewById(R.id.tvRescuedCount);
         TextView tvAdoptedCount = findViewById(R.id.tvAdoptedCount);
         TextView tvVolunteersCount = findViewById(R.id.tvVolunteersCount);
@@ -81,6 +139,13 @@ public class TrangVeChungToiActivity extends AppCompatActivity {
         if (tvAdoptedCount != null) tvAdoptedCount.setText("800+");
         if (tvVolunteersCount != null) tvVolunteersCount.setText("50+");
         if (tvYearsCount != null) tvYearsCount.setText("10+");
+    }
+    
+    private String formatNumber(int number) {
+        if (number >= 1000) {
+            return String.format("%.1fK+", number / 1000.0);
+        }
+        return String.valueOf(number) + "+";
     }
 }
 

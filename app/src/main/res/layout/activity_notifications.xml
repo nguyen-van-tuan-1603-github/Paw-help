@@ -70,6 +70,16 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- Loading ProgressBar -->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="32dp"
+                android:visibility="gone"
+                android:indeterminateTint="#4DB6AC" />
+
             <!-- Notifications List -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewNotifications"
@@ -85,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:padding="32dp"
+                android:padding="48dp"
                 android:visibility="gone">
 
                 <ImageView
@@ -93,15 +103,75 @@
                     android:layout_height="120dp"
                     android:src="@drawable/ic_paw_logo"
                     android:alpha="0.3"
-                    app:tint="@color/text_secondary" />
+                    app:tint="#4DB6AC" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Chưa có thông báo nào"
-                    android:textSize="16sp"
-                    android:textColor="@color/text_secondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary_dark"
                     android:layout_marginTop="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bạn sẽ nhận được thông báo khi có tin cứu hộ mới"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center" />
+            </LinearLayout>
+
+            <!-- Error State -->
+            <LinearLayout
+                android:id="@+id/layoutErrorState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="48dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@android:drawable/stat_notify_error"
+                    android:alpha="0.5"
+                    app:tint="#F44336" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Không thể tải thông báo"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#F44336"
+                    android:layout_marginTop="16dp" />
+
+                <TextView
+                    android:id="@+id/tvErrorMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vui lòng kiểm tra kết nối mạng"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRetry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Thử lại"
+                    android:textColor="@android:color/white"
+                    android:layout_marginTop="16dp"
+                    app:icon="@drawable/ic_baseline_refresh_24"
+                    app:iconTint="@android:color/white"
+                    app:backgroundTint="#F44336"
+                    app:cornerRadius="12dp"
+                    style="@style/Widget.Material3.Button" />
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
@@ -205,4 +275,3 @@
     </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
